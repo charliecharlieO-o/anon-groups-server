@@ -1,0 +1,150 @@
+======== v 1.0.0 First Major Release ========
+
+Pending Features:
+  - Add image field to board
+  - Users can have a description text box
+  - Change user info get
+  - Add code and strategy for uploaded media files
+  - Users can listen to a thread for notifications if they contributed?
+  - Add periodic cleaning routines (Server)
+  - Add error log capability
+  - Add code and settings for UdeG only registration
+
+Pending Enhancements:
+  - Add redis strategy for faster JWT authentication/session
+  - Refine passport strategy for redis and banned users
+  - "Autocomplete" for username in admin and user search
+  - Add code for push notifications (Google & Apple)
+  - Add account recovery route (Uses cellphone)
+
+Pending Patch:
+  - Decrease new_requests user counter when responding requests
+  - Add routes for: settings.priviledges, settings.issue_categories
+  - Add reply limits
+  - Add file size limit
+  - Add regex validators to url's
+
+TO DO NOW!
+ - Add validation and error response in POST requests
+ - Add 404 and 500 status where needed plus error numbering and docs
+ - Must add pertinent routes for viewable settings
+
+11.- Start developing user mobile app & admin mobile app
+
+12.- Setup server, buy domain, etc.
+13.- Publish apps
+
+/--  DAY COUNTDOWN  --/
+
+Days until deadline: 20
+
+//--- ROUTES, FINISHED? ---//
+
+*Users*
+  - Create User: ✔
+  - Login Phone: ✔
+  - Login Standard: ✔
+  - Get User Profile: +
+  - Update User Profile: +
+  - Search Username: +
+  - Ban User: +
+  - Unban User: +
+  - Update User Password: ✔
+  - Delete User: ✔
+  - Promote User: +
+  - List users by priviledges:
+
+*Boards*
+  - Create Board: ✔
+  - Get Board: ✔
+  - Board List: ✔
+  - Edit Board: ✔
+  - Delete Board: ✔
+  - List New Boards: ✔
+
+*Threads*
+  - Get Thread: ✔
+  - Post Thread: ✔
+  - Get Hot Threads: ✔
+  - Get New Threads: ✔
+  - Kill Thread: +
+  - Search Thread: ✔
+  - First X Hot Threads Overall: ✔
+
+*Replies*
+  - Get replies (With subReplies): ✔
+  - Get replies (No subReplies): ✔
+  - Get reply (No subReplies): ✔
+  - Get reply (With subReplies): ✔
+  - Get replies (Limited SubReplies): ✔
+  - Reply to Thread: ✔
+  - Reply To Reply: ✔
+  - Reply To SubReply: ✔
+  - Update Reply Visibility: +
+  - Delete SubReply: +
+
+*Requests*
+  - Get Info Request: ✔
+  - Check User's Info Access: ✔
+  - Send Info Request: ✔
+  - User's Sent Requests: ✔
+  - User's Received Requests: ✔
+  - Accept All Requests: + //Reset request counter in user
+  - Deny All Requests: + //Reset request counter in user
+  - Get Friends: ✔
+  - Get Foes: ✔
+  - Respond to Request: + //Reset request counter in user
+  - Delete Request: + //Reset request counter in user
+
+*Admins*
+  - Appoint New Admin: ✔
+  - Search for Admin (by name): ✔
+  - Get Admins Appointed by X User: ✔
+  - Admin List Last Resolution: +
+  - Admin List # Resolutions: +
+  - Admin List of Board: ✔
+  - Get Admin Info: ✔
+  - Admin List of Division: ✔
+  - Admin List By Name: ✔
+  - Update Admin's Board: ✔
+  - Update Admin's Priviledges: ✔
+  - Delete Admin: ✔
+
+*Issues*
+  - Post an Issue: ✔
+  - Get Issue: ✔
+  - Get Corresponding Issues: ✔
+  - Get Issues in Division: ✔
+  - Get Issues in Board: ✔
+  - Get Issues by Board and Division: ✔
+  - Resolve an Issue: ✔
+
+*Notifications*
+  - Get Notification:
+  - Get Unseen Notifications:
+  - Create Notification:
+  - Mark Notifications as Seen:
+  - Get Latest Notifications:
+  - Delete Notification:
+
+======== v 2.0.0 Second Major Release ========
+
+New Features:
+  - Users can create and admin their own boards (Just X per user)
+  - Users can follow other users
+  - Users can get notifications of accounts they follow
+  - Users can have an archive of most engaging threads or replies they posted
+  - Replies can be ordered by engagement ranking
+  - Has default Desktop Frontend
+  - User can have favorite list of boards
+  - Now SubReply's have text excerpt so people can know what the reply is about
+  - Boards can be ranked (based on people following them maybe?)
+  - Boards can have tags
+  - User gets notifications of threads he contributed to recently not only the last one
+
+Enhancements:
+  - Everything MUST be done with Promises now for better error handling
+  - Code MUST adhere to ES6 standards
+  - Bottlenecks MUST be reduced
+
+Patch: ?
