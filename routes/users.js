@@ -374,6 +374,8 @@ router.post("/promote", passport.authenticate("jwt", {session: false}), (req, re
   }
 });
 
+/* GET List users with specific priviledge in priviledges array*/
+
 //=================================================================================
 //									--	INFO REQUESTS --
 //=================================================================================
@@ -589,6 +591,27 @@ router.delete("/request/:request_id/remove", passport.authenticate("jwt", {sessi
 //									--	NOTIFICATIONS --
 //=================================================================================
 
+const default_notification_list = "_id title description reference_url seen";
+
+/* PUT set a notification as seen */
+router.put("/notification/:notif_id/set-seen", passport.authenticate("jwt", {session: false}), (req, res) => {
+  const now = (new Date()).now;
+  Notification.findOneAndUpdate({ "_id": req.params.notif_id, "owner": req.user.data._id },
+  {
+    "$set": {
+      "seen": true,
+      "date_seen": now
+    }
+  },{ "new": true }, (err, notif) => {
+    if(err || !notif){
+      res.json({ "success": true });
+    }
+    else{
+      res.json({ "success": true });
+    }
+  });
+});
+
 /* GET specific notification */
 router.get("/notification/:notif_id", passport.authenticate("jwt", {session: false}), (req, res) => {
   Notification.findOne({ "_id": req.params.notif_id, "owner": req.user.data._id }, (err, notif) => {
@@ -601,12 +624,28 @@ router.get("/notification/:notif_id", passport.authenticate("jwt", {session: fal
   });
 });
 
+/* DELETE remove all notifications of logged in user */
+router.delete("/notifications/empty", passport.authenticate("jwt", {session: false}), (req, res) => {
+  Notification.remove({ "owner": req.user.data._id }, (err) => {
+    if(err){
+      res.json({ "success": false });
+    }
+    else{
+      res.json({ "success": true });
+    }
+  });
+});
+
 /* GET unseen notifications */
-router.get("/notifications", passport.authenticate("jwt", {session: false}), (req, res) => {
-  Notification.find({ "owner": req.user.data._id, "seen": false }).sort(
+router.get("/notifications/unseen", passport.authenticate("jwt", {session: false}), (req, res) => {
+  Notification.find({ "owner": req.user.data._id, "seen": false }).select(
+    default_notification_list
+  ).sort(
     { "date_alerted": -1 }
+  ).limit(
+    settings.max_notif_list_results
   ).exec((err, notifications) => {
-    if(err || notifications){
+    if(err || !notifications){
       res.json({ "success": false });
     }
     else{
@@ -618,10 +657,10 @@ router.get("/notifications", passport.authenticate("jwt", {session: false}), (re
 /* PUT set all unseen notifs as seen */
 router.put("/notifications/set-seen", passport.authenticate("jwt", {session: false}), (req, res) => {
   const now = (new Date()).now;
-  Notifications.update({ "ower": req.user.data._id, "seen": false },
+  Notification.updateMany({ "owner": req.user.data._id, "seen": false },
   {
     "$set": { "seen": true, "date_seen": now }
-  }, { "multi": true }, (err) => {
+  }, (err) => {
     if(err){
       res.json({ "success": false });
     }
@@ -632,8 +671,10 @@ router.put("/notifications/set-seen", passport.authenticate("jwt", {session: fal
 });
 
 /* GET latest notifications (first X) */
-router.get("/notifications/list-short", passport.authenticate("jwt", {session: false}), (req, res) => {
-  Notifications.find({ "owner": req.user.data._id }).sort(
+router.get("/notifications/latest", passport.authenticate("jwt", {session: false}), (req, res) => {
+  Notification.find({ "owner": req.user.data._id }).select(
+    default_notification_list
+  ).sort(
     { "date_alerted": -1 }
   ).limit(
     settings.max_notif_list_results
@@ -648,8 +689,8 @@ router.get("/notifications/list-short", passport.authenticate("jwt", {session: f
 });
 
 /* DELETE remove a notification */
-router.get("/notification/:notif_id/remove", passport.authenticate("jwt", {session: false}), (req, res) => {
-  Notifications.remove({ "_id": req.params.notif_id, "owner": req.user.data._id }, (err) => {
+router.delete("/notification/:notif_id/remove", passport.authenticate("jwt", {session: false}), (req, res) => {
+  Notification.remove({ "_id": req.params.notif_id, "owner": req.user.data._id }, (err) => {
     if(err){
       res.json({ "success": false });
     }

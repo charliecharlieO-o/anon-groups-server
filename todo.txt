@@ -11,6 +11,7 @@ Pending Features:
   - Add code and settings for UdeG only registration
 
 Pending Enhancements:
+  - Split subcommenting function into two (quote user and reply to reply)
   - Add redis strategy for faster JWT authentication/session
   - Refine passport strategy for redis and banned users
   - "Autocomplete" for username in admin and user search
@@ -23,6 +24,7 @@ Pending Patch:
   - Add reply limits
   - Add file size limit
   - Add regex validators to url's
+  - Change poster schema in reply.js to e.g poster_name -> name
 
 TO DO NOW!
  - Add validation and error response in POST requests
@@ -36,7 +38,7 @@ TO DO NOW!
 
 /--  DAY COUNTDOWN  --/
 
-Days until deadline: 20
+Days until deadline: 19
 
 //--- ROUTES, FINISHED? ---//
 
@@ -44,15 +46,15 @@ Days until deadline: 20
   - Create User: ✔
   - Login Phone: ✔
   - Login Standard: ✔
-  - Get User Profile: +
-  - Update User Profile: +
-  - Search Username: +
-  - Ban User: +
-  - Unban User: +
+  - Get User Profile: ✔
+  - Update User Profile: ✔
+  - Search Username: ✔
+  - Ban User: ✔
+  - Unban User: ✔
   - Update User Password: ✔
   - Delete User: ✔
-  - Promote User: +
-  - List users by priviledges:
+  - Promote User: ✔
+  - List users by priviledges: ~
 
 *Boards*
   - Create Board: ✔
@@ -120,12 +122,16 @@ Days until deadline: 20
   - Resolve an Issue: ✔
 
 *Notifications*
-  - Get Notification:
-  - Get Unseen Notifications:
-  - Create Notification:
-  - Mark Notifications as Seen:
-  - Get Latest Notifications:
-  - Delete Notification:
+  - Get Notification: ✔
+  - Get Unseen Notifications: ✔
+  - Create Notification: ✔
+  - Mark Notifications as Seen: ✔
+  - Mark Notification as Seen: ✔
+  - Get Latest Notifications: ✔
+  - Delete Notification: ✔
+  - Empty Notification Bin: ✔
+
+*Settings*
 
 ======== v 2.0.0 Second Major Release ========
 
