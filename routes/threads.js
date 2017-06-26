@@ -298,7 +298,7 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {session: false}),
               // Notificate OP about reply if not OP
               if(req.user.data._id !== thread.poster.id){
                 utils.CreateAndSendNotification(thread.poster.id, "New Thread Reply",
-                  `${req.user.data.username} replied to your thread`, `/thread/replies/${reply._id}`, (err) => {});
+                  `${req.user.data.username} replied to your thread`, `/thread/replies/${reply._id}`);
               }
               // Return a successfull response
               res.json({ "success": true, "doc": reply });
@@ -340,7 +340,7 @@ const prepareSubReply = (userid, poster, text, media, callback) => {
         };
         return callback(subReply);
       }
-    })
+    });
   }
   else{
     // If it's just a reply to a reply
@@ -384,9 +384,15 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
               else{
                 reply.reply_count += 1;
                 reply.save();
-                // Notificate OP about the reply (NOT FINISHED)
-                utils.CreateAndSendNotification(thread.poster.id, "New Reply",
-                  `${req.user.data.username} replied to your thread`, `/thread/replies/${reply._id}`, (err) => {});
+                // Don't send a notification stating the obvious!
+                if(reply.poster.poster_id != req.user.data._id)
+                  utils.CreateAndSendNotification(reply.poster.poster_id, "New Reply",// Send out notification to reply OP
+                  `${req.user.data.username} commented on your reply`, `/thread/replies/${reply._id}`);
+                // Send out notification to addressed user
+                if(subReply.to != null)
+                  utils.CreateAndSendNotification(subReply.to.poster_id, "New Reply",
+                  `${req.user.data.username} replied to you`, `/thread/replies/${reply._id}`);
+                // Return successfull response
                 res.json({ "success": true, "doc": subReply });
               }
             });

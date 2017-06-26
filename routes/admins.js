@@ -58,7 +58,7 @@ router.post("/appoint", passport.authenticate("jwt", {session: false}), (req, re
           else{
             // Notificate user about promotion
             utils.CreateAndSendNotification(user._id, "You have been promoted",
-              "You now have admin status.", `/admin/uid/${user._id}`, (err) => {});
+              "You now have admin status.", `/admin/uid/${user._id}`);
             // Send successfull response
             res.json({ "success": true, "doc": admin });
           }
@@ -96,7 +96,7 @@ router.post("/search", passport.authenticate("jwt", {session: false}), (req, res
 /* GET admins appointed by specific user */
 router.get("/list/appointed-by/:user_id", passport.authenticate("jwt", {session: false}), (req, res) => {
   if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
-    User.findById(req.params.user_id, "_id username", (err, user) => {admin_issues
+    User.findById(req.params.user_id, "_id username", (err, user) => {
       if(err || !user){
         res.json({ "success": false, "error": 111 });
       }
@@ -282,7 +282,7 @@ router.put("/reassign/board/", passport.authenticate("jwt", {session: false}), (
           else{
             // Notificate user about reassignment
             utils.CreateAndSendNotification(admin.user.id, "You have been reassigned",
-              "You have been reassigned to a different board.", `/admin/id/${admin._id}`, (err) => {});
+              "You have been reassigned to a different board.", `/admin/id/${admin._id}`);
             // Return a successfull response
             res.json({ "success": true, "doc": admin });
           }
@@ -315,7 +315,7 @@ router.put("/reassign/divisions", passport.authenticate("jwt", {session: false})
           else{
             // Notificate user about reassignment
             utils.CreateAndSendNotification(admin.user.id, "You have been reassigned",
-              "Your assigned divisions have changed", `/admin/id/${admin._id}`, (err) => {});
+              "Your assigned divisions have changed", `/admin/id/${admin._id}`);
             // Return successfull response
             res.json({ "success": true, "doc": admin });
           }
@@ -338,7 +338,7 @@ router.delete("/remove", passport.authenticate("jwt", {session: false}), (req, r
       else {
         // Notificate user about dismissal
         utils.CreateAndSendNotification(admin.user.id, "You have been dismissed",
-          "You no longer have admin status", null, (err) => {});
+          "You no longer have admin status", null);
         // Return successfull response
         res.json({ "success": true });
       }
@@ -352,7 +352,7 @@ router.delete("/remove", passport.authenticate("jwt", {session: false}), (req, r
 //=================================================================================
 //									--	ISSUE MANAGEMENT --
 //=================================================================================
-// To read, update and delete issues, user account must contain the admin_issues priviledge
+// To read, update and delete issues, user account must be an admin of said board o area
 
 /* POST create a new issue (Must be a logged in user) */
 router.post("/post-issue", passport.authenticate("jwt", {session: false}), (req, res) => {

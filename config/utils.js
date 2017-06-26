@@ -63,7 +63,12 @@ const createAndSendNotification = (owner_id, title, description, url, callback) 
     "reference_url": url
   });
   Notification.create(notification, (err, notification) => {
-    return callback(err, notification);
+    if(typeof callback === 'function'){
+      return callback(err, notification);
+    }
+    else{
+      return (err == null);
+    }
   });
 };
 
