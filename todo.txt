@@ -1,35 +1,18 @@
-======== v 1.0.0 First Major Release ========
+======== v 1.0.0 Pre-Alpha Release ========
 
 Pending Features:
-  - Add image field to board
-  - Users can have a description text box
   - Change user info get
-  - Add code and strategy for uploaded media files
   - Users can listen to a thread for notifications if they contributed?
   - Add periodic cleaning routines (Server)
   - Add error log capability
   - Add code and settings for UdeG only registration
 
 Pending Enhancements:
-  - Split subcommenting function into two (quote user and reply to reply)
-  - Add redis strategy for faster JWT authentication/session
-  - Refine passport strategy for redis and banned users
   - "Autocomplete" for username in admin and user search
   - Add code for push notifications (Google & Apple)
   - Add account recovery route (Uses cellphone)
 
 Pending Patch:
-  - Decrease new_requests user counter when responding requests
-  - Add routes for: settings.priviledges, settings.issue_categories
-  - Add reply limits
-  - Add file size limit
-  - Add regex validators to url's
-  - Change poster schema in reply.js to e.g poster_name -> name
-
-TO DO NOW!
- - Add validation and error response in POST requests
- - Add 404 and 500 status where needed plus error numbering and docs
- - Must add pertinent routes for viewable settings
 
 11.- Start developing user mobile app & admin mobile app
 
@@ -147,10 +130,14 @@ New Features:
   - Boards can be ranked (based on people following them maybe?)
   - Boards can have tags
   - User gets notifications of threads he contributed to recently not only the last one
+  - Ability to _mention_ someone in a comment and notify them
 
 Enhancements:
   - Everything MUST be done with Promises now for better error handling
   - Code MUST adhere to ES6 standards
   - Bottlenecks MUST be reduced
+
+Patches:
+  - Change poster schema in reply.js to e.g poster_name -> name
 
 Patch: ?
