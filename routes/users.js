@@ -441,13 +441,10 @@ router.post("/request", passport.authenticate("jwt", {session: false}),(req, res
             newRequest.to["thumbnail_pic"] = user.profile_pic.thumbnail;
             Request.create(newRequest, (err, request) => {
               if(err || !request){
-                console.log(newRequest);
-                console.log(err);
                 res.json({ "success": false });
               }
               else{
-                user.new_requests += 1;
-                user.save();
+                user.update({ "$inc": { "new_requests": 1 }}); // Increment request count
                 res.json({ "success": true });
               }
             });
@@ -566,11 +563,17 @@ router.put("/request/:request_id/respond", passport.authenticate("jwt", {session
       "responded": true,
       "has_access": req.body.has_access
     }
-  }, (err, request) => {
+  }, { "new": true }, (err, request) => {
     if(err || !request){ // If there's an error
       res.json({ "success": false });
     }
     else{
+      // Notificate requesting user that he has been accepted
+      if(req.body.has_access == true){
+        utils.createAndSendNotification(request.requested_by.id, `${request.to.username} accepted your request`,
+          "You now have access to user's networking data", `/user/${req.to.id}/profile`);
+      }
+      // Send successfull response
       res.json({ "success": true });
     }
   });
@@ -643,8 +646,6 @@ router.get("/notifications/unseen", passport.authenticate("jwt", {session: false
     default_notification_list
   ).sort(
     { "date_alerted": -1 }
-  ).limit(
-    settings.max_notif_list_results
   ).exec((err, notifications) => {
     if(err || !notifications){
       res.json({ "success": false });

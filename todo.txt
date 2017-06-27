@@ -6,6 +6,8 @@ Pending Features:
   - Add periodic cleaning routines (Server)
   - Add error log capability
   - Add code and settings for UdeG only registration
+  - Modify thread and reply posting to allow for alias instead of username
+  - Add aliases arra in user profile for posting
 
 Pending Enhancements:
   - "Autocomplete" for username in admin and user search
@@ -132,6 +134,8 @@ New Features:
   - Boards can have tags
   - User gets notifications of threads he contributed to recently not only the last one
   - Ability to _mention_ someone in a comment and notify them
+  - Notifications have thumbnail field to display on app instead of icon
+  - Change username field in /models/user to 'handle' to emulate @handle
 
 Enhancements:
   - Everything MUST be done with Promises now for better error handling

@@ -1,5 +1,6 @@
-// Import notification
+// Import models required for notification
 const Notification = require("../models/notification");
+const User = require("../models/user");
 
 // Check user priviledge (not social priviledge)
 const priviledgeCheck = (priviledgeList, requiredPriviledges) => {
@@ -64,6 +65,7 @@ const createAndSendNotification = (owner_id, title, description, url, callback) 
   });
   Notification.create(notification, (err, notification) => {
     if(typeof callback === 'function'){
+      User.findOneAndUpdate({ "_id": owner_id }, { "$inc": { "new_notifications": 1 }}); // Increment notification counter
       return callback(err, notification);
     }
     else{
