@@ -50,6 +50,30 @@ router.get("/list/by-date", passport.authenticate("jwt", {session: false}), (req
   }
 });
 
+/* POST search users with specific priviledge in priviledges array*/
+router.post("/search/by-priviledge", passport.authenticate("jwt", {session: false}), (req, res) => {
+  if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
+    utils.ParseJSON(req.body.divisions, (e, divisions) => {
+      if(divisions && Array.isArray(divisions)){
+        User.find({"priviledges": {"$in": divisions}}, default_user_list, { "sort": { "signedup_at": -1 }}, (err, users) => {
+          if(err || !users){
+            res.json({ "success": false });
+          }
+          else{
+            res.json({ "success": true, "doc": users });
+          }
+        });
+      }
+      else{
+        res.json({ "success": false });
+      }
+    });
+  }
+  else{
+    res.status(401).send("Unauthorized");
+  }
+});
+
 /* GET user */
 router.get("/:user_id/profile", passport.authenticate("jwt", {session: false}), (req, res) => {
   // If an admin is requestinig the profile
@@ -374,8 +398,6 @@ router.post("/promote", passport.authenticate("jwt", {session: false}), (req, re
     res.status(401).send("Unauthorized");
   }
 });
-
-/* GET List users with specific priviledge in priviledges array*/
 
 //=================================================================================
 //									--	INFO REQUESTS --

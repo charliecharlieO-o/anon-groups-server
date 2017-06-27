@@ -2,12 +2,11 @@
 
 Pending Features:
   - Change user info get
-  - Users can listen to a thread for notifications if they contributed?
   - Add periodic cleaning routines (Server)
   - Add error log capability
   - Add code and settings for UdeG only registration
   - Modify thread and reply posting to allow for alias instead of username
-  - Add aliases arra in user profile for posting
+  - Add alias in user profile for posting
 
 Pending Enhancements:
   - "Autocomplete" for username in admin and user search
@@ -39,7 +38,7 @@ Days until deadline: 19
   - Update User Password: ✔
   - Delete User: ✔
   - Promote User: ✔
-  - List users by priviledges: ~
+  - Search users by priviledges: ✔
 
 *Boards*
   - Create Board: ✔
@@ -136,6 +135,7 @@ New Features:
   - Ability to _mention_ someone in a comment and notify them
   - Notifications have thumbnail field to display on app instead of icon
   - Change username field in /models/user to 'handle' to emulate @handle
+  - Users can listen to a thread for notifications if they contributed?
 
 Enhancements:
   - Everything MUST be done with Promises now for better error handling
