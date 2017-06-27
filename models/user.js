@@ -21,6 +21,7 @@ const userSchema = new Schema({
 		picture: { type: String  },
 		thumbnail: { type: String  }
 	},
+	bio: { type: String, maxlength: 300, default: null },
 	priviledges: [ { type: String, required: true, enum: settings.priviledges } ],
 	contact_info: [ userContactInfo ],
 	phone_number: { type: String, required: true, unique: true },

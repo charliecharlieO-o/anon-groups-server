@@ -118,6 +118,7 @@ router.post("/register", (req, res) => {
       "picture": "/default/def.jpg",
       "thumbnail": "/default/def.jpg"
     },
+    "bio": req.body.bio,
 		"contact_info": [],
 		"info_requests": [],
 		"alerts": [],
@@ -209,12 +210,12 @@ router.post("/login/standard", (req, res) => {
 	});
 });
 
-/* PUT edit user profile */
+/* PUT edit user profile */ //INCOMPLETE
 router.put("/update-profile", passport.authenticate("jwt", {session: false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["edit_user"]) || req.user.data._id == req.body.user_id){
     // Edit profile information
     User.findById(req.body.user_id, (err, user) => {
-      if(err || !user || user.is_super && user._id != req.user.data._id){
+      if(err || !user || !user.is_super || user._id != req.user.data._id){
         res.json({ "success": false });
       }
       else{
