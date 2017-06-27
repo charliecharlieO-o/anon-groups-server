@@ -46,6 +46,7 @@ Days until deadline: 19
   - Edit Board: ✔
   - Delete Board: ✔
   - List New Boards: ✔
+  - Change Board Image: ✔
 
 *Threads*
   - Get Thread: ✔

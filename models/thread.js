@@ -26,7 +26,7 @@ const threadSchema = new Schema({
 	text: { type: String, maxlength: 500 },
 	media: {
 		file: { type: String },
-		size: { type: String }
+		size: { type: String } //Add thumbnail subfield to thread
 	},
 	reply_excerpts: [ // Will store the first n comment excerpts
 		replyExcerptSchema

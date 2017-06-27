@@ -21,6 +21,10 @@ router.post("/", passport.authenticate("jwt", {session: false}), (req, res) => {
 		let newBoard = new Board({
 			"slug": shortid.generate(),
 			"name": req.body.name,
+			"image": {
+				"file": "/media/file.jpg",
+				"thumbnail": "/media/thumbnail/th.png"
+			},
 			"short_name": req.body.short_name,
 			"description": req.body.description,
 			"created_by": {
@@ -70,6 +74,31 @@ router.get("/list/short", passport.authenticate("jwt", {session:false}), (req, r
 			res.json({ "success": true, "doc": boards });
 		}
 	});
+});
+
+/* PUT change board image */
+router.put("/:board_slug/image", passport.authenticate("jwt", {session: false}), (req, res) => {
+	if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["edit_board"])){
+		Board.findOneAndUpdate({ "slug": req.params.board_slug },
+		{
+			"$set": {
+				"image":{
+					"file": "/media/file1.jpg",
+					"thumbnail": "/media/thumbnail/th1.png"
+				}
+			}
+		}, { "new": true }, (err, board) => {
+			if(err || !board){
+				res.json({ "success": false });
+			}
+			else{
+				res.json({ "success": true });
+			}
+		});
+	}
+	else{
+		res.status(401).send("Unauthorized");
+	}
 });
 
 /* PUT edit specific board */
