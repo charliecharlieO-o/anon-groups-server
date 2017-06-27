@@ -18,6 +18,7 @@ const threads = require("./routes/threads");
 const boards = require("./routes/boards");
 const users = require("./routes/users");
 const admins = require("./routes/admins");
+const settings = require("./routes/settings");
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use("/user", users);
 app.use("/board", boards);
 app.use("/thread", threads);
 app.use("/admin", admins);
+app.use("/settings", settings);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
