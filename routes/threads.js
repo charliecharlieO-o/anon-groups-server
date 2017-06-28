@@ -313,53 +313,7 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {session: false}),
   }
 });
 
-// Custom function to build a subReply
-const prepareSubReply = (userid, poster, text, media, callback) => {
-  if(userid != null){
-    if(userid == poster.id )
-      return callback(null);
-    // If its a reply to a reply from a reply
-    User.findById(userid, "_id username profile_pic banned", (err, user) =>{
-      if(err || !user || user.banned.is_banned){
-        return callback(null);
-      }
-      else{
-        let subReply = {
-          "poster": poster,
-          "to": {
-            "poster_name": user.username,
-            "poster_thumbnail": user.profile_pic.thumbnail,
-            "poster_id": user._id
-          },
-          "media": {
-            "file": "/test/imaage.jpg",
-            "thumbnail": "/test/thumb.png",
-            "size": "27 MB"
-          },
-          "text": text
-        };
-        return callback(subReply);
-      }
-    });
-  }
-  else{
-    // If it's just a reply to a reply
-    let subReply = {
-      "poster": poster,
-      "to": null,
-      "media": {
-        "file": "/test/imaage.jpg",
-        "thumbnail": "/test/thumb.png",
-        "size": "27 MB"
-      },
-      "text": text
-    };
-    return callback(subReply);
-  }
-};
-
-/* POST a new subreply to a reply based on shortid */ //(GENERATES NOTIFICATION)
-//  can use 'to' parameter to indicate is a reply to a reply in the reply O.o
+/* POST a SubReply to a Reply */ //(GENERATES NOTIFICATION)
 router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", {session: false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["can_reply"])){
     Thread.findById(req.params.thread_id, "alive reply_count", (err, thread) => {
@@ -367,38 +321,58 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
         res.status(404).send("Thread Not Found");
       }
       else{
-        let poster = {
-          "poster_name": req.user.data.username,
-          "poster_thumbnail": req.user.data.profile_pic.thumbnail,
-          "poster_id": req.user.data._id
-        };
-        prepareSubReply(req.body.to, poster, req.body.text, req.body.media, (subReply) => {
-          if(subReply != null){
-            Reply.findOneAndUpdate({ "_id": req.params.reply_id, "visible": true, "reply_count": { "$lt": settings.max_reply_subreplies }},
-            { "$push": { "replies": subReply }},
-            { "new": true, "safe": true },
-            (err, reply) => {
-              if(err || !reply){
-                res.json({ "success": false });
-              }
-              else{
-                reply.reply_count += 1;
-                reply.save();
-                // Don't send a notification stating the obvious!
-                if(reply.poster.poster_id != req.user.data._id)
-                  utils.CreateAndSendNotification(reply.poster.poster_id, "New Reply",// Send out notification to reply OP
-                  `${req.user.data.username} commented on your reply`, `/thread/replies/${reply._id}`);
-                // Send out notification to addressed user
-                if(subReply.to != null)
-                  utils.CreateAndSendNotification(subReply.to.poster_id, "New Reply",
-                  `${req.user.data.username} replied to you`, `/thread/replies/${reply._id}`);
-                // Return successfull response
-                res.json({ "success": true, "doc": subReply });
-              }
-            });
+        Reply.findOne({ "_id": req.params.reply_id, "visible": true, "reply_count": { "$lt": settings.max_reply_subreplies }},
+        (err, reply) => {
+          if(err || !reply){
+            res.json({ "success": false });
           }
           else{
-            res.json({ "success": false });
+            User.findById(req.body.to, "_id username profile_pic", (err, user) => {
+              // Prepare 'to' field you can post on your own sub-replies with null
+              let to = null;
+              // If user isn't addressing himself (he is OP or it's his id) create 'to' field
+              if(user != null && (!reply.poster.poster_id.equals(req.user.data._id) || !user._id.equals(req.user.data._id))){
+                to = {
+                  "poster_name": user.username,
+                  "poster_thumbnail": user.profile_pic.thumbnail,
+                  "poster_id": user._id
+                };
+              }
+              else if(user == null && !req.user.data._id.equals(reply.poster.poster_id)){
+                to = {
+                  "poster_name": reply.poster.poster_name,
+                  "poster_thumbnail": reply.poster.poster_thumbnail,
+                  "poster_id": reply.poster.poster_id
+                };
+              }
+              // Prepare subDoc
+              let subReply = {
+                "poster": {
+                  "poster_name": req.user.data.username,
+                  "poster_thumbnail": req.user.data.profile_pic.thumbnail,
+                  "poster_id": req.user.data._id
+                },
+                "to": to,
+                "media": {
+                  "file": "/test/imaage.jpg",
+                  "thumbnail": "/test/thumb.png",
+                  "size": "27 MB"
+                },
+                "text": req.body.text
+              };
+              reply.update({ "$push": { "replies": subReply }, "$inc": { "reply_count": 1 }}, (err) => {
+                if(err){
+                  res.json({ "success": false });
+                }
+                else{
+                  // Send notification
+                  if(subReply.to != null)
+                    utils.CreateAndSendNotification(subReply.to.poster_id, "New Reply",
+                    `${req.user.data.username} replied to you.`, `/thread/replies/${reply._id}`);
+                  res.json({ "success": true });
+                }
+              });
+            });
           }
         });
       }

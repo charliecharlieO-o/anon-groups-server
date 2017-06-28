@@ -4,14 +4,9 @@ Pending Features:
   - Change user info get
   - Add periodic cleaning routines (Server)
   - Add error log capability
-  - Add code and settings for UdeG only registration
-  - Modify thread and reply posting to allow for alias instead of username
-  - Add alias in user profile for posting
 
 Pending Enhancements:
   - "Autocomplete" for username in admin and user search
-  - Add code for push notifications (Google & Apple)
-  - Add account recovery route (Uses cellphone)
 
 Pending Patch:
 
@@ -118,7 +113,24 @@ Days until deadline: 19
 
 *Settings*
 
+======== v 1.0.1 Release Alpha UdeG Branch ========
+
+Features:
+  - Add code and settings for UdeG only registration
+
+Enhancements:
+  - Add code for push notifications (Google & Apple)
+  - Add account recovery route (Uses cellphone)
+
 ======== v 2.0.0 Second Major Release ========
+
+Enhancements:
+  - Everything MUST be done with Promises now for better error handling and reduced CALLBACK HELL
+  - Code MUST adhere to ES6 standards
+  - Bottlenecks MUST be reduced
+
+Patches:
+  - Change poster schema in reply.js to e.g poster_name -> name
 
 New Features:
   - Users can create and admin their own boards (Just X per user)
@@ -126,6 +138,9 @@ New Features:
   - Users can listen to boards
   - Users can get notifications of accounts they follow
   - Users can have an archive of selected engaging threads or replies they liked
+  - User account can have cellphone number or email if you want the ability to recover
+    but it's not obligatory, account can be done with reCAPTCHA but it ain't recoverable
+    until user provides that info
   - Replies can be ordered by engagement ranking
   - Has default Desktop Frontend
   - User can have favorite list of boards
@@ -137,13 +152,3 @@ New Features:
   - Notifications have thumbnail field to display on app instead of icon
   - Change username field in /models/user to 'handle' to emulate @handle
   - Users can listen to a thread for notifications if they contributed?
-
-Enhancements:
-  - Everything MUST be done with Promises now for better error handling
-  - Code MUST adhere to ES6 standards
-  - Bottlenecks MUST be reduced
-
-Patches:
-  - Change poster schema in reply.js to e.g poster_name -> name
-
-Patch: ?
