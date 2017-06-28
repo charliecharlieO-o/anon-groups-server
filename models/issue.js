@@ -13,6 +13,11 @@ const issueSchema = new Schema({
 		name: { type: String, required: true },
 		id: { type: Schema.ObjectId, required: true }
 	},
+	file: {
+		name: { type: String, default: null },
+		location: { type: String, default: null },
+		size: { type: String, default: null }
+	},
 	category: { type: String, required: true, enum: settings.issue_categories	},
 	problem: { type: String, required: true, maxlength:500 },
 	solved: { type: Boolean, default: false },
