@@ -16,7 +16,7 @@ require("../config/passport")(passport);
 const board_list_default = "_id slug name short_name last_activity";
 
 /* POST create new board */
-router.post("/", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/", passport.authenticate("jwt", {"session": false}), (req, res) => {
 	if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["create_board"])){
 		let newBoard = new Board({
 			"slug": shortid.generate(),
@@ -49,7 +49,7 @@ router.post("/", passport.authenticate("jwt", {session: false}), (req, res) => {
 });
 
 /* GET specific board by slug */
-router.get("/:board_slug", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/:board_slug", passport.authenticate("jwt", {"session": false}), (req, res) => {
 	// Simple get of a board
 	Board.findOne({ "slug": req.params.board_slug, "active": true }, (err, board) => {
 		if(err){
@@ -77,7 +77,7 @@ router.get("/list/short", passport.authenticate("jwt", {session:false}), (req, r
 });
 
 /* PUT change board image */
-router.put("/:board_slug/image", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/:board_slug/image", passport.authenticate("jwt", {"session": false}), (req, res) => {
 	if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["edit_board"])){
 		Board.findOneAndUpdate({ "slug": req.params.board_slug },
 		{
@@ -102,7 +102,7 @@ router.put("/:board_slug/image", passport.authenticate("jwt", {session: false}),
 });
 
 /* PUT edit specific board */
-router.put("/:board_slug", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/:board_slug", passport.authenticate("jwt", {"session": false}), (req, res) => {
 	// Check user is allowed to update board
 	if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["edit_board"])){
 		// Preprocess and clean data
@@ -130,7 +130,7 @@ router.put("/:board_slug", passport.authenticate("jwt", {session: false}), (req,
 });
 
 /* DELETE board */
-router.delete("/:board_slug", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.delete("/:board_slug", passport.authenticate("jwt", {"session": false}), (req, res) => {
 	// Check if user is allowed to delete board
 	if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["delete_board"])){
 		Board.deleteOne({ "slug": req.params.board_slug }, (err) => {
@@ -148,7 +148,7 @@ router.delete("/:board_slug", passport.authenticate("jwt", {session: false}), (r
 });
 
 /* GET newest boards */
-router.get("/list/new", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list/new", passport.authenticate("jwt", {"session": false}), (req, res) => {
 	Board.find({ "active": true }, board_list_default,
 	{
 		"limit": settings.max_board_search_count,
@@ -166,7 +166,7 @@ router.get("/list/new", passport.authenticate("jwt", {session: false}), (req, re
 });
 
 /* PUT delete admin from board
-router.put("/:board_slug/admins/remove", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/:board_slug/admins/remove", passport.authenticate("jwt", {"session": false}), (req, res) => {
 	// Check if user can update and remove admins
 	// Preprocess and clean data
 	Board.update({ "slug": req.params.board_slug },

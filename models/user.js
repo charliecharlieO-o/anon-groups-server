@@ -12,12 +12,15 @@ const saltRounds = 10;
 const userContactInfo = new Schema({
 	network_name : { type: String, required: true },
 	network_contact: { type: String, required: true },
-});
+}, { "_id": false });
 
 const userSchema = new Schema({
 	username: { type: String, minlength:1, maxlength: 35, required: true, unique: true, index: true },
 	password: { type: String, required: true },
-	alias: { type: String, minlength: 1, maxlength: 35, default: null }, // This field will enforce user anonimity throughout the site
+	alias: { // This field will enforce user anonimity throughout the site
+		handle: { type: String, minlength: 1, maxlength: 35, default: null },
+		changed: { type: Date, default: null }
+	},
 	profile_pic: {
 		picture: { type: String  },
 		thumbnail: { type: String  }

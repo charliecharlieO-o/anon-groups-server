@@ -33,7 +33,7 @@ const isAdmin = (user_data, callback) => {
 // To access, user account must contain the admin_admins priviledge
 
 /* POST appoint a new admin, only super users can appoint new admins  */ //(GENERATES NOTIFICATION)
-router.post("/appoint", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/appoint", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super){
     User.findById(req.body.user_id, "_id username banned", (err, user) => {
       if(err || !user){
@@ -72,7 +72,7 @@ router.post("/appoint", passport.authenticate("jwt", {session: false}), (req, re
 });
 
 /* POST search for an admin by name */
-router.post("/search", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/search", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     Admin.find(
       { "$text": { "$search": req.body.name }},
@@ -94,7 +94,7 @@ router.post("/search", passport.authenticate("jwt", {session: false}), (req, res
 });
 
 /* GET admins appointed by specific user */
-router.get("/list/appointed-by/:user_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list/appointed-by/:user_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     User.findById(req.params.user_id, "_id username", (err, user) => {
       if(err || !user){
@@ -118,7 +118,7 @@ router.get("/list/appointed-by/:user_id", passport.authenticate("jwt", {session:
 });
 
 /* GET admins ordered by recent last resolution */
-router.get("/list/by-resolution", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list/by-resolution", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super ||  utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     Admin.find({}, { "sort":{ "last_resolution":-1 }}, (err, admins) => {
       if(err || !admins){
@@ -135,7 +135,7 @@ router.get("/list/by-resolution", passport.authenticate("jwt", {session: false})
 });
 
 /* GET admins ordered by number of resolutions */
-router.get("/list/issues-solved", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list/issues-solved", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super ||  utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     Admin.find({}, { "sort":{ "issues_solved":1 }}, (err, admins) => {
       if(err || !admins){
@@ -152,7 +152,7 @@ router.get("/list/issues-solved", passport.authenticate("jwt", {session: false})
 });
 
 /* GET admins of a board */
-router.get("/list/board/:board_slug", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list/board/:board_slug", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super ||  utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     Admin.find({ "board.slug": req.params.board_slug }, (err, admins) => {
       if(err || !admins){
@@ -169,7 +169,7 @@ router.get("/list/board/:board_slug", passport.authenticate("jwt", {session: fal
 });
 
 /* POST search for admins that contain specific priviledges */
-/*router.post("/search/by-priviledges", passport.authenticate("jwt", {session: false}), (req, res) => {
+/*router.post("/search/by-priviledges", passport.authenticate("jwt", {"session": false}), (req, res) => {
   isSysAdmin(req.user.data.priviledges, (has_access) => {
     if(has_access){
       const priviledges = JSON.parse(req.body.priviledge_list);
@@ -189,7 +189,7 @@ router.get("/list/board/:board_slug", passport.authenticate("jwt", {session: fal
 });*/
 
 /* GET admin info based on user id */
-router.get("/uid/:user_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/uid/:user_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     Admin.findOne({ "user.id": req.params.user_id }, (err, admin) => {
       if(err || !admin){
@@ -206,7 +206,7 @@ router.get("/uid/:user_id", passport.authenticate("jwt", {session: false}), (req
 });
 
 /* GET admin info based on admin id */
-router.get("/id/:admin_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/id/:admin_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     Admin.findById(req.params.admin_id, (err, admin) => {
       if(err || !admin){
@@ -223,7 +223,7 @@ router.get("/id/:admin_id", passport.authenticate("jwt", {session: false}), (req
 });
 
 /* GET list of admins belonging to a division */
-router.get("/list/division/:admin_division", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list/division/:admin_division", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     Admin.find({ "divisions": {"$all": req.params.admin_division}}).sort({ "user.name":1 }).exec((err, admins) => {
       if(err || !admins){
@@ -241,7 +241,7 @@ router.get("/list/division/:admin_division", passport.authenticate("jwt", {sessi
 });
 
 /* GET list of all admins ordered by name */
-router.get("/list-all", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list-all", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     Admin.find({}).sort({ "user_name":1 }).exec((err, admins) => {
       if(err || !admins){
@@ -258,7 +258,7 @@ router.get("/list-all", passport.authenticate("jwt", {session: false}), (req, re
 });
 
 /* PUT update an admin data (Board) */ //(GENERATES NOTIFICATION)
-router.put("/reassign/board/", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/reassign/board/", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super){
     // Get assigned board
     Board.findById(req.body.board_id, "_id slug short_name", (err, board) => {
@@ -296,7 +296,7 @@ router.put("/reassign/board/", passport.authenticate("jwt", {session: false}), (
 });
 
 /* PUT update an admin data (Division) */ //(GENERATES NOTIFICATION)
-router.put("/reassign/divisions", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/reassign/divisions", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super){
     utils.ParseJSON(req.body.divisions, (err, json) => {
       if(err){
@@ -329,7 +329,7 @@ router.put("/reassign/divisions", passport.authenticate("jwt", {session: false})
 });
 
 /* DELETE an admin */ //(GENERATES NOTIFICATION)
-router.delete("/remove", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.delete("/remove", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super){
     Admin.findByIdAndRemove(req.body.admin_id, (err, admin) => {
       if(err || !admin){
@@ -355,7 +355,7 @@ router.delete("/remove", passport.authenticate("jwt", {session: false}), (req, r
 // To read, update and delete issues, user account must be an admin of said board o area
 
 /* POST create a new issue (Must be a logged in user) */
-router.post("/post-issue", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/post-issue", passport.authenticate("jwt", {"session": false}), (req, res) => {
   const newIssue = new Issue({
     "by_user": {
       "name": req.user.data.username,
@@ -378,7 +378,7 @@ router.post("/post-issue", passport.authenticate("jwt", {session: false}), (req,
 });
 
 /* GET an issue info based on id */
-router.get("/issue/:issue_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/issue/:issue_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   isAdmin(req.user.data, (has_access, admin) => {
     if(has_access){
       Issue.findById(req.params.issue_id, (err, issue) => {
@@ -397,7 +397,7 @@ router.get("/issue/:issue_id", passport.authenticate("jwt", {session: false}), (
 });
 
 /* GET corresponding issues depending of admin (by board and division) */
-router.get("/issues", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/issues", passport.authenticate("jwt", {"session": false}), (req, res) => {
   isAdmin(req.user.data, (has_access, admin) => {
     if(has_access){
       const query = (!admin.board)?
@@ -419,7 +419,7 @@ router.get("/issues", passport.authenticate("jwt", {session: false}), (req, res)
 });
 
 /* GET issues by division */
-router.get("/issues/division/:division", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/issues/division/:division", passport.authenticate("jwt", {"session": false}), (req, res) => {
   isAdmin(req.user.data, (has_access, admin) => {
     if(has_access && admin.divisions.includes(req.params.division)){
       const query = (!admin.board)?
@@ -441,7 +441,7 @@ router.get("/issues/division/:division", passport.authenticate("jwt", {session: 
 });
 
 /* GET issues by board */
-router.get("/issues/board/:board_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/issues/board/:board_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   isAdmin(req.user.data, (has_access, admin) => {
     if(has_access && (req.params.board_id == admin.board.id || !admin.board.id)){
       Issue.find({ "board": req.params.board_id }, default_issue_list, (err, issues) => {
@@ -460,7 +460,7 @@ router.get("/issues/board/:board_id", passport.authenticate("jwt", {session: fal
 });
 
 /* GET issues by board and division */
-router.get("/issues/board/:board_id/division/:division", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/issues/board/:board_id/division/:division", passport.authenticate("jwt", {"session": false}), (req, res) => {
   isAdmin(req.user.data, (has_access, admin) => {
     if(has_access && !admin.board && admin.divisions.includes(req.params.division)){
       Issue.find({ "board": req.params.board_id, "category": req.params.division }, default_issue_list, (err, issues) => {
@@ -479,7 +479,7 @@ router.get("/issues/board/:board_id/division/:division", passport.authenticate("
 });
 
 /* PUT Resolve an issue */
-router.put("/solve-issue/:issue_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/solve-issue/:issue_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   isAdmin(req.user.data, (has_access, admin) => {
     if(has_access){
       const query = (!admin.board)?

@@ -34,7 +34,7 @@ router.get("/list/all", (req, res) => {
 });
 
 /* GET users that registered between X and Y dates */
-router.get("/list/by-date", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list/by-date", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     User.find({}, default_user_list, { "sort": { "signedup_at": -1 }}, (err, users) => {
       if(err || !users){
@@ -51,7 +51,7 @@ router.get("/list/by-date", passport.authenticate("jwt", {session: false}), (req
 });
 
 /* POST search users with specific priviledge in priviledges array*/
-router.post("/search/by-priviledge", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/search/by-priviledge", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     utils.ParseJSON(req.body.divisions, (e, divisions) => {
       if(divisions && Array.isArray(divisions)){
@@ -75,7 +75,7 @@ router.post("/search/by-priviledge", passport.authenticate("jwt", {session: fals
 });
 
 /* GET user */
-router.get("/:user_id/profile", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/:user_id/profile", passport.authenticate("jwt", {"session": false}), (req, res) => {
   // If an admin is requestinig the profile
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
     User.findById(req.params.user_id, { "password": 0 }, (err, user) => {
@@ -138,6 +138,7 @@ router.post("/register", (req, res) => {
 	let newUser = new User({
 		"username": req.body.username,
 		"password": req.body.password,
+    "alias": req.body.alias,
     "profile_pic": {
       "picture": "/default/def.jpg",
       "thumbnail": "/default/def.jpg"
@@ -235,18 +236,18 @@ router.post("/login/standard", (req, res) => {
 });
 
 /* PUT edit user profile */ //INCOMPLETE
-router.put("/update-profile", passport.authenticate("jwt", {session: false}), (req, res) => {
-  if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["edit_user"]) || req.user.data._id == req.body.user_id){
+router.put("/update-profile", passport.authenticate("jwt", {"session": false}), (req, res) => {
+  if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["edit_user"]) || req.user.data._id.equals(req.body.user_id)){
     // Edit profile information
     User.findById(req.body.user_id, (err, user) => {
-      if(err || !user || !user.is_super || user._id != req.user.data._id){
+      if(err || !user || (user.is_super && !user._id.equals(req.user.data._id))){
         res.json({ "success": false });
       }
       else{
         // Add profile pic
         const user_info = {
           "contact_info": (req.body.contact_info != null)? JSON.parse(req.body.contact_info) : user.contact_info,
-          "phone_number": (req.body.phone_number != null)? req.body.phone_number : user.phone_number
+          "bio": (req.body.bio != null)? req.body.bio : user.bio
         };
         user.contact_info = user_info.contact_info;
         user.phone_number = user_info.phone_number;
@@ -266,8 +267,30 @@ router.put("/update-profile", passport.authenticate("jwt", {session: false}), (r
   }
 });
 
+/* PUT update profile picture */
+/* PUT change phone number */
+
+/* PUT change user alias */
+router.put("/alias", passport.authenticate("jwt", {"session": false}), (req, res) => {
+  const hours = Math.abs(req.user.data.alias.changed - new Date())/36e5;
+  if(hours >= settings.alias_change_rate){
+    //Check it's a valid string
+    req.user.data.update({"$set":{"alias.handle": req.body.alias, "changed": new Date()}}, (err) => {
+      if(err){
+        res.json({ "success": false });
+      }
+      else{
+        res.json({ "success": true });
+      }
+    });
+  }
+  else{
+    res.json({ "success": false, "doc": hours });
+  }
+});
+
 /* POST search user by username with filters */
-router.post("/search", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/search", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["search_user"])){
     User.find(
       { "$text": { "$search": req.body.username }},
@@ -293,7 +316,7 @@ router.post("/search", passport.authenticate("jwt", {session: false}), (req, res
 });
 
 /* PUT ban user */ //(GENERATES NOTIFICATION)
-router.put("/ban", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/ban", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["ban_user"])){
     User.findOneAndUpdate({ "_id": req.body.user_id, "is_super": false },
     {
@@ -319,7 +342,7 @@ router.put("/ban", passport.authenticate("jwt", {session: false}), (req, res) =>
 });
 
 /* PUT unban user */
-router.put("/unban", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/unban", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["unban_user"])){
     User.findOneAndUpdate({ "_id": req.body.user_id },
     {
@@ -345,7 +368,7 @@ router.put("/unban", passport.authenticate("jwt", {session: false}), (req, res) 
 });
 
 /* PUT change user's password */
-router.put("/password", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/password", passport.authenticate("jwt", {"session": false}), (req, res) => {
   User.findOneAndUpdate({ "_id": req.user.data._id },
   {
     "$set":{ "password": req.body.new_password }
@@ -360,7 +383,7 @@ router.put("/password", passport.authenticate("jwt", {session: false}), (req, re
 });
 
 /* DELETE user */
-router.delete("/remove", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.delete("/remove", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["delete_user"])){
     User.remove({ "_id": req.body.user_id, "is_super": false }, (err) => {
       if(err){
@@ -377,7 +400,7 @@ router.delete("/remove", passport.authenticate("jwt", {session: false}), (req, r
 });
 
 /* POST upgrade a user's priviledges or remove them */ //(GENERATES NOTIFICATION)
-router.post("/promote", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/promote", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["promote_user"])){
     const priviledges = (req.body.priviledges != null)? JSON.parse(req.body.priviledges) : [];
     User.findOneAndUpdate({ "_id": req.body.user_id, "is_super": false },
@@ -407,7 +430,7 @@ router.post("/promote", passport.authenticate("jwt", {session: false}), (req, re
 const default_request_list = "to requested_by date_requested";
 
 /* GET specific info request */
-router.get("/request/:request_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/request/:request_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.findById({ "_id": req.params.request_id, "actors": { "$in": [req.user.data._id]}},
   "to requested_by has_access", (err, request) => {
     if(err || !request){
@@ -420,7 +443,7 @@ router.get("/request/:request_id", passport.authenticate("jwt", {session: false}
 });
 
 /* GET check if user has info access */
-router.get("/is-friend/:user_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/is-friend/:user_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.findOne({ "actors": { "$all": [req.user.data._id, req.params.user_id]}}, "has_access", (err, request) => {
     if(err || !request){
       res.json({ "success": false });
@@ -432,7 +455,7 @@ router.get("/is-friend/:user_id", passport.authenticate("jwt", {session: false})
 });
 
 /* POST create an info request */ //(GENERATES NOTIFICATION)
-router.post("/request", passport.authenticate("jwt", {session: false}),(req, res) => {
+router.post("/request", passport.authenticate("jwt", {"session": false}),(req, res) => {
   let newRequest = new Request({
     "to": {
       "id": req.body.to_userid
@@ -478,7 +501,7 @@ router.post("/request", passport.authenticate("jwt", {session: false}),(req, res
 });
 
 /* GET list of user's forward info requests */
-router.get("/sent-requests", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/sent-requests", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.find({ "requested_by.id": req.user.data._id, "responded": false }).select(
     default_request_list
   ).sort(
@@ -494,7 +517,7 @@ router.get("/sent-requests", passport.authenticate("jwt", {session: false}), (re
 });
 
 /* GET list of user's incoming info requests */
-router.get("/my-requests", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/my-requests", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.find({ "to.id": req.user.data._id, "responded": false }).select(
     default_request_list
   ).sort(
@@ -510,7 +533,7 @@ router.get("/my-requests", passport.authenticate("jwt", {session: false}), (req,
 });
 
 /* POST accept all info requests */
-router.post("/requests/accept-all", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/requests/accept-all", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.update({ "to.id": req.user.data._id, "responded": false },
   {
     "$set": {
@@ -528,7 +551,7 @@ router.post("/requests/accept-all", passport.authenticate("jwt", {session: false
 });
 
 /* POST deny all info requests */
-router.post("/requests/deny-all", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/requests/deny-all", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.update({ "to.id": req.user.data._id, "responded": false },
   {
     "$set": {
@@ -546,7 +569,7 @@ router.post("/requests/deny-all", passport.authenticate("jwt", {session: false})
 });
 
 /* GET list of users with granted access */
-router.get("/friends", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/friends", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.find({ "actors": req.user.data._id, "has_access": true }).select(
     default_request_list
   ).sort(
@@ -562,7 +585,7 @@ router.get("/friends", passport.authenticate("jwt", {session: false}), (req, res
 });
 
 /* GET list of users which access has been denied */
-router.get("/foes", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/foes", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.find({ "to.id": req.user.data._id, "responded": true ,"has_access": false }).select(
     default_request_list
   ).sort(
@@ -578,7 +601,7 @@ router.get("/foes", passport.authenticate("jwt", {session: false}), (req, res) =
 });
 
 /* PUT accept or deny an info request */ //(GENERATES NOTIFICATION)
-router.put("/request/:request_id/respond", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/request/:request_id/respond", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.findOneAndUpdate({ "to.id": req.user.data._id, "_id": req.params.request_id, "responded": false },
   {
     "$set": {
@@ -602,7 +625,7 @@ router.put("/request/:request_id/respond", passport.authenticate("jwt", {session
 });
 
 /* DELETE revoke an user's info access */
-router.delete("/request/:request_id/remove", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.delete("/request/:request_id/remove", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.remove({ "_id": req.params.request_id, "actors": { "$in": [req.user.data._id]}}, (err) => {
     if(err){
       res.json({ "success": false });
@@ -620,7 +643,7 @@ router.delete("/request/:request_id/remove", passport.authenticate("jwt", {sessi
 const default_notification_list = "_id title description reference_url seen";
 
 /* PUT set a notification as seen */
-router.put("/notification/:notif_id/set-seen", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/notification/:notif_id/set-seen", passport.authenticate("jwt", {"session": false}), (req, res) => {
   const now = (new Date()).now;
   Notification.findOneAndUpdate({ "_id": req.params.notif_id, "owner": req.user.data._id },
   {
@@ -639,7 +662,7 @@ router.put("/notification/:notif_id/set-seen", passport.authenticate("jwt", {ses
 });
 
 /* GET specific notification */
-router.get("/notification/:notif_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/notification/:notif_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Notification.findOne({ "_id": req.params.notif_id, "owner": req.user.data._id }, (err, notif) => {
     if(err || !notif){
       res.json({ "success": false });
@@ -651,7 +674,7 @@ router.get("/notification/:notif_id", passport.authenticate("jwt", {session: fal
 });
 
 /* DELETE remove all notifications of logged in user */
-router.delete("/notifications/empty", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.delete("/notifications/empty", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Notification.remove({ "owner": req.user.data._id }, (err) => {
     if(err){
       res.json({ "success": false });
@@ -663,7 +686,7 @@ router.delete("/notifications/empty", passport.authenticate("jwt", {session: fal
 });
 
 /* GET unseen notifications */
-router.get("/notifications/unseen", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/notifications/unseen", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Notification.find({ "owner": req.user.data._id, "seen": false }).select(
     default_notification_list
   ).sort(
@@ -679,7 +702,7 @@ router.get("/notifications/unseen", passport.authenticate("jwt", {session: false
 });
 
 /* PUT set all unseen notifs as seen */
-router.put("/notifications/set-seen", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/notifications/set-seen", passport.authenticate("jwt", {"session": false}), (req, res) => {
   const now = (new Date()).now;
   Notification.updateMany({ "owner": req.user.data._id, "seen": false },
   {
@@ -695,7 +718,7 @@ router.put("/notifications/set-seen", passport.authenticate("jwt", {session: fal
 });
 
 /* GET latest notifications (first X) */
-router.get("/notifications/latest", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/notifications/latest", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Notification.find({ "owner": req.user.data._id }).select(
     default_notification_list
   ).sort(
@@ -713,7 +736,7 @@ router.get("/notifications/latest", passport.authenticate("jwt", {session: false
 });
 
 /* DELETE remove a notification */
-router.delete("/notification/:notif_id/remove", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.delete("/notification/:notif_id/remove", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Notification.remove({ "_id": req.params.notif_id, "owner": req.user.data._id }, (err) => {
     if(err){
       res.json({ "success": false });

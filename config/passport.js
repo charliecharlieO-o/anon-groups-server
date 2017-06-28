@@ -5,7 +5,7 @@ const utils = require("./passport-utils");
 const User = require("../models/user");
 const config = require("../config/database");
 
-const user_defaults = "_id username priviledges profile_pic banned is_super";
+const user_defaults = "_id username priviledges profile_pic banned is_super alias";
 
 module.exports = (passport) => {
 	let opts = {};

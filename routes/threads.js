@@ -22,7 +22,7 @@ require("../config/passport")(passport);
 const thread_list_default = "_id title board poster text media reply_count reply_excerpts"
 
 /* GET X Hot Threads overall */
-router.get("/hot-top", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/hot-top", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Thread.find(
     { "alive": true }
   ).select(
@@ -40,7 +40,7 @@ router.get("/hot-top", passport.authenticate("jwt", {session: false}), (req, res
 });
 
 /* GET thread based on shortid */
-router.get("/:thread_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/:thread_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Thread.findOne({ "_id": req.params.thread_id, "alive": true }, (err, thread) => {
     if(err || !thread)
       res.json({ "success": false });
@@ -50,7 +50,7 @@ router.get("/:thread_id", passport.authenticate("jwt", {session: false}), (req, 
 });
 
 /* POST new thread to board (User protected) */
-router.post("/:board_slug/post", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/:board_slug/post", passport.authenticate("jwt", {"session": false}), (req, res) => {
   // Check if user can post, Check last time user posted a thread
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["can_post"])){
     Board.findOne({ "slug": req.params.board_slug, "active": true }, "_id", (err, board) => {
@@ -90,7 +90,7 @@ router.post("/:board_slug/post", passport.authenticate("jwt", {session: false}),
 });
 
 /* GET thread's with specific related board ordered by relevance limit X */
-router.get("/list/hot/:board_slug", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list/hot/:board_slug", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Board.findOne({ "slug": req.params.board_slug, "active": true }, "_id", (err, board) => {
     if(err || !board){
       res.json({ "success": false, "error": 105 });
@@ -115,7 +115,7 @@ router.get("/list/hot/:board_slug", passport.authenticate("jwt", {session: false
 });
 
 /* GET thread's with specific related board ordered by date limit X */
-router.get("/list/new/:board_slug", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/list/new/:board_slug", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Board.findOne({ "slug": req.params.board_slug, "active": true }, "_id", (err, board) => {
     if(err || !board){
       res.json({ "success": false, "error": 105 });
@@ -140,7 +140,7 @@ router.get("/list/new/:board_slug", passport.authenticate("jwt", {session: false
 });
 
 /* PUT update thread status to alive or dead */ //(GENERATES NOTIFICATION)
-router.put("/kill/:board_slug/:thread_id", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.put("/kill/:board_slug/:thread_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   // Check if user can kill thread
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["delete_thread"])){
     Board.findOne({ "slug": req.params.board_slug, "active": true }, "_id", (err, board) => {
@@ -169,7 +169,7 @@ router.put("/kill/:board_slug/:thread_id", passport.authenticate("jwt", {session
 });
 
 /* POST search for a thread based on title and board */
-router.post("/search", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/search", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Thread.find(
     { "$text": { "$search": req.body.query }, "board": req.body.board_id },
     { "score": { "$meta": "textScore"}}
@@ -194,7 +194,7 @@ router.post("/search", passport.authenticate("jwt", {session: false}), (req, res
 //=================================================================================
 
 /* GET replies to a thread based on thread's id with subReply field */
-router.get("/:thread_id/replies", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/:thread_id/replies", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Reply.find({ "thread": req.params.thread_id, "visible": true }, (err, replies) => {
     if(err || !replies){
       res.json({ "success": false });
@@ -206,7 +206,7 @@ router.get("/:thread_id/replies", passport.authenticate("jwt", {session: false})
 });
 
 /* GET replies to a thread based on thread's shortid without subReply field */
-router.get("/:thread_id/replies/nosub", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/:thread_id/replies/nosub", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Reply.find({ "thread": req.params.thread_id, "visible": true }, { "replies": 0 }, (err, replies) => {
     if(err || !replies){
       res.json({ "success": false });
@@ -218,7 +218,7 @@ router.get("/:thread_id/replies/nosub", passport.authenticate("jwt", {session: f
 });
 
 /* GET replies to a thread with limited subReplies on sight */
-router.get("/:thread_id/replies/limit-sub", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.get("/:thread_id/replies/limit-sub", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Reply.find({ "thread": req.params.thread_id, "visible": true }, { "replies": { "$slice": [0,2] }}, (err, replies) => {
     if(err || !replies){
       res.json({ "success": false });
@@ -254,7 +254,7 @@ router.get("/replies/:reply_id", (req, res) => {
 });
 
 /* POST a new reply to a thread based on shortid */ //(GENERATES NOTIFICATION)
-router.post("/:thread_id/reply", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["can_reply"])){
     Thread.findOne({ "_id": req.params.thread_id, "alive": true, "reply_count": { "$lt":settings.max_thread_replies }}, (err, thread) => {
       if(err || !thread){
@@ -314,7 +314,7 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {session: false}),
 });
 
 /* POST a SubReply to a Reply */ //(GENERATES NOTIFICATION)
-router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", {session: false}), (req, res) => {
+router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["can_reply"])){
     Thread.findById(req.params.thread_id, "alive reply_count", (err, thread) => {
       if(err || !thread || !thread.alive || thread.reply_count >= settings.max_thread_replies){

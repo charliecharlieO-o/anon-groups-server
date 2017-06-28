@@ -17,6 +17,7 @@ module.exports = {
 	"max_notif_list_results": 300,
 	"max_thread_replies": 500, // Maximum nunmber of replies per thread
 	"max_reply_subreplies": 50, // Maximum number of sub-replies per reply
-	"creme_of_the_top_max": 10
+	"creme_of_the_top_max": 10,
+	"alias_change_rate": 24 // How often can a user change his alias (hours)
 	// Max file size
 };
