@@ -15,8 +15,9 @@ const userContactInfo = new Schema({
 });
 
 const userSchema = new Schema({
-	username: { type: String, minlength:1, maxlength: 35, required: true, unique: true },
+	username: { type: String, minlength:1, maxlength: 35, required: true, unique: true, index: true },
 	password: { type: String, required: true },
+	alias: { type: String, minlength: 1, maxlength: 35, default: null }, // This field will enforce user anonimity throughout the site
 	profile_pic: {
 		picture: { type: String  },
 		thumbnail: { type: String  }
