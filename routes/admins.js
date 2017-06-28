@@ -361,6 +361,11 @@ router.post("/post-issue", passport.authenticate("jwt", {"session": false}), (re
       "name": req.user.data.username,
       "id": req.user.data._id
     },
+    "file": {
+      "name": "example.jpg",
+      "location": "/some/location/example.jpg",
+      "size": "4 MB"
+    },
     "category": req.body.category,
     "problem": req.body.issue_text,
     "board": req.body.board_id,
