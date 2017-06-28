@@ -61,8 +61,8 @@ router.post("/:board_slug/post", passport.authenticate("jwt", {"session": false}
         let newThread = new Thread({
           "board": board._id,
           "poster": {
-            "name": req.user.data.username,
-            "thumbnail": req.user.data.profile_pic.thumbnail,
+            "name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
+            "thumbnail": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
             "id": req.user.data._id
           },
           "title": req.body.title,
@@ -264,8 +264,8 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
         let newReply = new Reply({
           "thread": thread._id,
           "poster": {
-            "poster_name": req.user.data.username,
-            "poster_thumbnail": req.user.data.profile_pic.thumbnail,
+            "poster_name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
+            "poster_thumbnail": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
             "poster_id": req.user.data._id
           },
           "media": {
@@ -281,13 +281,12 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
           if(thread.reply_excerpts.length < settings.excerpts_per_thread){
             thread.reply_excerpts.push({
               "reply_id": reply._id,
-              "poster_name": req.user.data.username,
+              "poster_name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
               "poster_id": req.user.data._id,
-              "poster_pic": req.user.data.profile_pic.thumbnail,
+              "poster_pic": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
               "text_excerpt": reply.text.substring(0, settings.excerpts_substring)
             });
           }
-          thread.reply_count += 1;
           thread.save((err) => {
             if(err){
               // If it failed let us delete the reply
@@ -297,9 +296,12 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
             else{
               // Notificate OP about reply if not OP
               if(req.user.data._id !== thread.poster.id){
+                const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username;
                 utils.CreateAndSendNotification(thread.poster.id, "New Thread Reply",
-                  `${req.user.data.username} replied to your thread`, `/thread/replies/${reply._id}`);
+                `${rp} replied to your thread`, `/thread/replies/${reply._id}`);
               }
+              // Increment reponses
+              thread.update({"$inc":{"reply_count": 1}});
               // Return a successfull response
               res.json({ "success": true, "doc": reply });
             }
@@ -327,14 +329,14 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
             res.json({ "success": false });
           }
           else{
-            User.findById(req.body.to, "_id username profile_pic", (err, user) => {
+            User.findById(req.body.to, "_id username profile_pic alias", (err, user) => {
               // Prepare 'to' field you can post on your own sub-replies with null
               let to = null;
               // If user isn't addressing himself (he is OP or it's his id) create 'to' field
               if(user != null && (!reply.poster.poster_id.equals(req.user.data._id) || !user._id.equals(req.user.data._id))){
                 to = {
-                  "poster_name": user.username,
-                  "poster_thumbnail": user.profile_pic.thumbnail,
+                  "poster_name": (user.alias.handle != null)? user.alias.handle : user.username,
+                  "poster_thumbnail": (user.alias.handle != null)? "anon": user.profile_pic.thumbnail,
                   "poster_id": user._id
                 };
               }
@@ -348,8 +350,8 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
               // Prepare subDoc
               let subReply = {
                 "poster": {
-                  "poster_name": req.user.data.username,
-                  "poster_thumbnail": req.user.data.profile_pic.thumbnail,
+                  "poster_name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
+                  "poster_thumbnail": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
                   "poster_id": req.user.data._id
                 },
                 "to": to,
@@ -366,9 +368,11 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
                 }
                 else{
                   // Send notification
-                  if(subReply.to != null)
+                  if(subReply.to != null){
+                    const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username;
                     utils.CreateAndSendNotification(subReply.to.poster_id, "New Reply",
-                    `${req.user.data.username} replied to you.`, `/thread/replies/${reply._id}`);
+                    `${rp} replied to you.`, `/thread/replies/${reply._id}`);
+                  }
                   res.json({ "success": true });
                 }
               });

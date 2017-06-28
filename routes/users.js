@@ -273,7 +273,7 @@ router.put("/update-profile", passport.authenticate("jwt", {"session": false}), 
 /* PUT change user alias */
 router.put("/alias", passport.authenticate("jwt", {"session": false}), (req, res) => {
   const hours = Math.abs(req.user.data.alias.changed - new Date())/36e5;
-  if(hours >= settings.alias_change_rate){
+  if(req.user.data.alias.handle == null || hours >= settings.alias_change_rate){
     //Check it's a valid string
     req.user.data.update({"$set":{"alias.handle": req.body.alias, "changed": new Date()}}, (err) => {
       if(err){
