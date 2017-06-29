@@ -489,17 +489,22 @@ router.post("/request", passport.authenticate("jwt", {"session": false}),(req, r
             res.json({ "success": false });
           }
           else{
-            newRequest.to["username"] = user.username;
-            newRequest.to["thumbnail_pic"] = user.profile_pic.thumbnail;
-            Request.create(newRequest, (err, request) => {
-              if(err || !request){
-                res.json({ "success": false });
-              }
-              else{
-                user.update({ "$inc": { "new_requests": 1 }}); // Increment request count
-                res.json({ "success": true });
-              }
-            });
+            if(user.new_requests >= settings.max_info_requests){
+              newRequest.to["username"] = user.username;
+              newRequest.to["thumbnail_pic"] = user.profile_pic.thumbnail;
+              Request.create(newRequest, (err, request) => {
+                if(err || !request){
+                  res.json({ "success": false });
+                }
+                else{
+                  user.update({ "$inc": { "new_requests": 1 }}); // Increment request count
+                  res.json({ "success": true });
+                }
+              });
+            }
+            else{
+              res.json({ "success": false });
+            }
           }
         });
       }

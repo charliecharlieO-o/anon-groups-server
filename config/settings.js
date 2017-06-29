@@ -4,7 +4,6 @@ module.exports = {
 				"delete_comment", "can_reply", "can_post", "delete_thread", "admin_admins", "admin_issues" //Remove admin_issues
   ],
   "max_info_requests": 500,
-  "max_alerts": 1000,
 	"max_alive_posts": 1,
   "issue_categories": [ "SPAM", "ILLEGAL", "RULES", "BUG", "SECURITY", "INAPROPRIATE", "USER" ],
   "max_board_search_count": 20,
