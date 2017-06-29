@@ -8,8 +8,7 @@ module.exports = {
   "issue_categories": [ "SPAM", "ILLEGAL", "RULES", "BUG", "SECURITY", "INAPROPRIATE", "USER" ],
   "max_board_search_count": 20,
   "recent_search_range": 7200, // Seconds
-  "max_list_search_results": 300,
-	"max_thread_search_resutls": 55,
+	"max_thread_search_resutls": 250,
 	"excerpts_per_thread": 3,
 	"excerpts_substring": 30,
 	"max_user_search_results": 50,

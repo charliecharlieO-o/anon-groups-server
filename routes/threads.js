@@ -49,6 +49,21 @@ router.get("/:thread_id", passport.authenticate("jwt", {"session": false}), (req
   });
 });
 
+/* GET dead thread */
+router.get("/dead/:thread_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
+  if(req.user.data.is_super){
+    Thread.findOne({ "_id": req.params.thread_id, "alive": false }, (err, thread) => {
+      if(err || !thread)
+        res.json({ "success": false });
+      else
+        res.json({ "success": true, "doc": thread });
+    });
+  }
+  else{
+    res.status(401).send("Unauthorized");
+  }
+});
+
 /* POST new thread to board (User protected) */
 router.post("/:board_slug/post", passport.authenticate("jwt", {"session": false}), (req, res) => {
   // Check if user can post, Check last time user posted a thread
@@ -137,6 +152,59 @@ router.get("/list/new/:board_slug", passport.authenticate("jwt", {"session": fal
       });
     }
   });
+});
+
+/* GET last N removed threads overall */
+router.get("/list/removed/", passport.authenticate("jwt", {"session": false}), (req, res) => {
+  if(req.user.data.is_super){
+    Thread.find(
+      { "alive": false }
+    ).select(
+      thread_list_default
+    ).sort(
+      { "created_at": -1 }
+    ).limit(
+      settings.max_thread_search_resutls
+    ).exec((err, threads) => {
+      if(err || !threads)
+        res.json({ "success": false });
+      else
+        res.json({ "success": true, "doc": threads });
+    });
+  }
+  else{
+    res.status(401).send("Unauthorized");
+  }
+});
+
+/* GET last N removed threads from a board */
+router.get("/list/removed/:board_slug", passport.authenticate("jwt", {"session": false}), (req, res) => {
+  if(req.user.data.is_super){
+    Board.findOne({ "slug": req.params.board_slug, "active": true }, "_id", (err, board) => {
+      if(err || !board){
+        res.json({ "success": false, "error": 105 });
+      }
+      else{
+        Thread.find(
+          { "board": board._id, "alive": false }
+        ).select(
+          thread_list_default
+        ).sort(
+          { "created_at": -1 }
+        ).limit(
+          settings.max_thread_search_resutls
+        ).exec((err, threads) => {
+          if(err || !threads)
+            res.json({ "success": false });
+          else
+            res.json({ "success": true, "doc": threads });
+        });
+      }
+    });
+  }
+  else{
+    res.status(401).send("Unauthorized");
+  }
 });
 
 /* PUT update thread status to alive or dead */ //(GENERATES NOTIFICATION)

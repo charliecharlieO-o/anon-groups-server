@@ -1,6 +1,7 @@
 ======== v 1.0.0 Release Pre-Alpha ========
 
 Pending Features:
+  - Add socket for notifications
   - Add periodic cleaning routines (Server)
   - Add error log capability
 
@@ -50,7 +51,7 @@ Days until deadline: 17
   - Get New Threads: ✔
   - Get Board's Deleted threads: ~
   - Get Deleted threads overall: ~
-  - Kill Thread: +
+  - Kill Thread: ✔
   - Search Thread: ✔
   - First X Hot Threads Overall: ✔
 
@@ -136,6 +137,7 @@ Enhancements:
 Patches:
   - Change poster schema in reply.js to e.g poster_name -> name
   - Change contact_info in user model to 'networks'
+  - Change "board" to "groups" overall in the system
 
 New Features:
   - Users can create and admin their own boards (Just X per user)
