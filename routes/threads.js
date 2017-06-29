@@ -140,26 +140,24 @@ router.get("/list/new/:board_slug", passport.authenticate("jwt", {"session": fal
 });
 
 /* PUT update thread status to alive or dead */ //(GENERATES NOTIFICATION)
-router.put("/kill/:board_slug/:thread_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
+router.put("/kill/:thread_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   // Check if user can kill thread
-  if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["delete_thread"])){
-    Board.findOne({ "slug": req.params.board_slug, "active": true }, "_id", (err, board) => {
-      if(err || !board){
-        res.json({ "success": false, "error": 105 });
+  if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["delete_thread"])){
+    Thread.findOneAndUpdate({ "_id": req.params.thread_id, "alive": true },
+    {
+      "$set": {
+        "alive": false
+      }
+    },
+    { "new": true },(err, thread) => {
+      if(err || !thread){
+        res.json({ "success": false });
       }
       else{
-        Thread.findOneAndUpdate({ "_id": req.params.thread_id },
-        {
-          "$set": {
-            "alive": false
-          }
-        },
-        { "new": true },(err, thread) => {
-          if(err || !thread)
-            res.json({ "success": false });
-          else
-            res.json({ "success": true });
-        });
+        // Send notification to OP
+        utils.CreateAndSendNotification(thread.poster.id, "Your content was removed",
+          `Your reply was removed due to ${req.body.reason}`, null);
+        res.json({ "success": true });
       }
     });
   }
@@ -388,35 +386,61 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
 });
 
 /* PUT update reply visibility */ //(GENERATES NOTIFICATION)
-router.put("/replies/kill/:reply_id", (req, res) => {
+router.put("/replies/kill/:reply_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   // Check if current user has permission to kill replies
-  // Search reply and change visibility to false
-  Reply.findOneAndUpdate({ "_id": req.params.reply_id },
-  { "$set": {"visible": false} },
-  (err, reply) => {
-    if(err || !reply){
-      res.json({ "success": false });
-    }
-    else{
-      res.json({ "success": true });
-    }
-  });
+  if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["kill_replies"])){
+    Reply.findOneAndUpdate({ "_id": req.params.reply_id, "removed": false },
+    {
+      "$set": {
+        "media": null,
+        "text": "THIS POST HAS BEEN CATEGORIZED AS ILLEGAL",
+        "removed": true
+      }
+    }, { "new": true }, (err, reply) => {
+      if(err || !reply){
+        res.json({ "success": false });
+      }
+      else{
+        // Send notification to OP
+        utils.CreateAndSendNotification(reply.poster.poster_id, "Your content was removed",
+          `Your reply was removed due to ${req.body.reason}`, null);
+        // Send successfull response
+        res.json({ "success": true });
+      }
+    });
+  }
+  else{
+    res.status(401).send("Unauthorized");
+  }
 });
 
 /* PUT update subreply visibility */ //(GENERATES NOTIFICATION)
-router.put("/replies/kill/:reply_id/:sreply_id", (req, res) => {
+router.put("/replies/kill/:reply_id/:sreply_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   // Check if current user has permission to kill subreplies
-  // Search subreply and change visibility to false
-  Reply.update({ "_id": req.params.reply_id },
-  {"$pull": {"replies": { "_id": req.params.sreply_id }}},
-  {"safe": true}, (err, reply) => {
-    if(err || !reply){
-      res.json({ "success": false });
-    }
-    else{
-      res.json({ "success": true, "doc": reply });
-    }
-  });
+  if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["kill_replies"])){
+    Reply.findOneAndUpdate({ "_id": req.params.reply_id, "replies._id": req.params.sreply_id, "removed": false },
+    {
+      "$set":{
+        "replies.$.media": null,
+        "replies.$.text": "THIS POST HAS BEEN CATEGORIZED AS ILLEGAL",
+        "replies.$.removed": true
+      }
+    }, { "new": true }, (err, subreply) => {
+      if(err || !subreply){
+        res.json({ "success": false });
+      }
+      else{
+        // Notify OP
+        utils.CreateAndSendNotification(subreply.replies.id(req.params.sreply_id).poster.poster_id, "Your content was removed",
+          `Your reply was removed due to ${req.body.reason}`, null);
+        // Send successfull response
+        res.json({ "success": true });
+      }
+    });
+  }
+  else{
+    res.status(401).send("Unauthorized");
+  }
 });
 
 module.exports = router;

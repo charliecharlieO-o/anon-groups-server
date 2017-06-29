@@ -1,7 +1,7 @@
 module.exports = {
 	"priviledges": [ "delete_board", "create_board", "edit_board", "admin_board", "promote_user",
         "create_user", "delete_user", "edit_user", "search_user", "ban_user", "unban_user",
-				"delete_comment", "can_reply", "can_post", "delete_thread", "admin_admins", "admin_issues" //Remove admin_issues
+				"kill_replies", "delete_comment", "can_reply", "can_post", "delete_thread", "admin_admins", "admin_issues" //Remove admin_issues
   ],
   "max_info_requests": 500,
 	"max_alive_posts": 1,

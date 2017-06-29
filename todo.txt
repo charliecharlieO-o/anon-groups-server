@@ -1,7 +1,6 @@
 ======== v 1.0.0 Release Pre-Alpha ========
 
 Pending Features:
-  - Change user info get
   - Add periodic cleaning routines (Server)
   - Add error log capability
 
@@ -17,7 +16,7 @@ Pending Patch:
 
 /--  DAY COUNTDOWN  --/
 
-Days until deadline: 19
+Days until deadline: 17
 
 //--- ROUTES, FINISHED? ---//
 
@@ -49,6 +48,8 @@ Days until deadline: 19
   - Post Thread: ✔
   - Get Hot Threads: ✔
   - Get New Threads: ✔
+  - Get Board's Deleted threads: ~
+  - Get Deleted threads overall: ~
   - Kill Thread: +
   - Search Thread: ✔
   - First X Hot Threads Overall: ✔
@@ -75,8 +76,8 @@ Days until deadline: 19
   - Deny All Requests: + //Reset request counter in user
   - Get Friends: ✔
   - Get Foes: ✔
-  - Respond to Request: + //Reset request counter in user
-  - Delete Request: + //Reset request counter in user
+  - Kill Reply: + //Reset request counter in user
+  - Kill SubReply: + //Reset request counter in user
 
 *Admins*
   - Appoint New Admin: ✔
@@ -111,9 +112,7 @@ Days until deadline: 19
   - Delete Notification: ✔
   - Empty Notification Bin: ✔
 
-*Settings*
-
-======== v 1.0.1 Release Alpha UdeG Branch ========
+======== v 1.0.1 Release Alpha UdeG Fork ========
 
 Features:
   - Add code and settings for UdeG only registration
@@ -122,12 +121,17 @@ Enhancements:
   - Add code for push notifications (Google & Apple)
   - Add account recovery route (Uses cellphone)
 
+Patches;
+  - Translate messages to Spanish?
+
 ======== v 2.0.0 Second Major Release ========
 
 Enhancements:
   - Everything MUST be done with Promises now for better error handling and reduced CALLBACK HELL
   - Code MUST adhere to ES6 standards
   - Bottlenecks MUST be reduced
+  - Separate notifications and requests from users.js
+  - Separate replies from threads.js
 
 Patches:
   - Change poster schema in reply.js to e.g poster_name -> name

@@ -15,6 +15,7 @@ const subReply = new Schema({
 		thumbnail: { type: String },
 		size: { type: String }
 	},
+	removed: { type: Boolean, required: true, default: false },
 	text: { type: String, required: true, maxlength: 200 }
 });
 
@@ -26,6 +27,7 @@ const replySchema = new Schema({
 		thumbnail: { type: String },
 		size: { type: String }
 	},
+	removed: { type: Boolean, required: true, default: false },
 	text: { type: String, required: true, maxlength: 500 },
 	reply_count: { type: Number, required: true, default: 0 },
 	replies: [ subReply ]
