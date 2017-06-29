@@ -195,7 +195,7 @@ router.post("/search", passport.authenticate("jwt", {"session": false}), (req, r
 
 /* GET replies to a thread based on thread's id with subReply field */
 router.get("/:thread_id/replies", passport.authenticate("jwt", {"session": false}), (req, res) => {
-  Reply.find({ "thread": req.params.thread_id, "visible": true }, (err, replies) => {
+  Reply.find({ "thread": req.params.thread_id }, (err, replies) => {
     if(err || !replies){
       res.json({ "success": false });
     }
@@ -207,7 +207,7 @@ router.get("/:thread_id/replies", passport.authenticate("jwt", {"session": false
 
 /* GET replies to a thread based on thread's shortid without subReply field */
 router.get("/:thread_id/replies/nosub", passport.authenticate("jwt", {"session": false}), (req, res) => {
-  Reply.find({ "thread": req.params.thread_id, "visible": true }, { "replies": 0 }, (err, replies) => {
+  Reply.find({ "thread": req.params.thread_id }, { "replies": 0 }, (err, replies) => {
     if(err || !replies){
       res.json({ "success": false });
     }
@@ -219,7 +219,7 @@ router.get("/:thread_id/replies/nosub", passport.authenticate("jwt", {"session":
 
 /* GET replies to a thread with limited subReplies on sight */
 router.get("/:thread_id/replies/limit-sub", passport.authenticate("jwt", {"session": false}), (req, res) => {
-  Reply.find({ "thread": req.params.thread_id, "visible": true }, { "replies": { "$slice": [0,2] }}, (err, replies) => {
+  Reply.find({ "thread": req.params.thread_id }, { "replies": { "$slice": [0,2] }}, (err, replies) => {
     if(err || !replies){
       res.json({ "success": false });
     }
@@ -231,7 +231,7 @@ router.get("/:thread_id/replies/limit-sub", passport.authenticate("jwt", {"sessi
 
 /* GET reply without subreplies based on id */
 router.get("/replies/:reply_id/nosub", (req, res) => {
-  Reply.findOne({ "_id": req.params.reply_id, "visible": true}, { replies: 0 }, (err, reply) => {
+  Reply.findOne({ "_id": req.params.reply_id }, { replies: 0 }, (err, reply) => {
     if(err || !reply){
       res.json({ "success": false });
     }
@@ -243,7 +243,7 @@ router.get("/replies/:reply_id/nosub", (req, res) => {
 
 /* GET reply with subreplies based on id */
 router.get("/replies/:reply_id", (req, res) => {
-  Reply.findOne({ "_id": req.params.reply_id, "visible": true}, (err, reply) => {
+  Reply.findOne({ "_id": req.params.reply_id }, (err, reply) => {
     if(err || !reply){
       res.json({ "success": false });
     }
@@ -323,7 +323,7 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
         res.status(404).send("Thread Not Found");
       }
       else{
-        Reply.findOne({ "_id": req.params.reply_id, "visible": true, "reply_count": { "$lt": settings.max_reply_subreplies }},
+        Reply.findOne({ "_id": req.params.reply_id, "reply_count": { "$lt": settings.max_reply_subreplies }},
         (err, reply) => {
           if(err || !reply){
             res.json({ "success": false });

@@ -26,7 +26,6 @@ const replySchema = new Schema({
 		thumbnail: { type: String },
 		size: { type: String }
 	},
-	visible: { type: Boolean, required: true, default: true },
 	text: { type: String, required: true, maxlength: 500 },
 	reply_count: { type: Number, required: true, default: 0 },
 	replies: [ subReply ]
