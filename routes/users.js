@@ -688,6 +688,9 @@ router.put("/notification/:notif_id/set-seen", passport.authenticate("jwt", {"se
       res.json({ "success": true });
     }
     else{
+      // Update user's notification account
+      req.user.data.update({ "$inc": {"new_notifications": -1}}).exec();
+      // Send successfull response
       res.json({ "success": true });
     }
   });
@@ -707,11 +710,14 @@ router.get("/notification/:notif_id", passport.authenticate("jwt", {"session": f
 
 /* DELETE remove all notifications of logged in user */
 router.delete("/notifications/empty", passport.authenticate("jwt", {"session": false}), (req, res) => {
-  Notification.remove({ "owner": req.user.data._id }, (err) => {
+  Notification.remove({ "owner": req.user.data._id }, (err, notification) => {
     if(err){
       res.json({ "success": false });
     }
     else{
+      // Update user's notification account
+      req.user.data.update({ "$set": {"new_notifications": 0}}).exec();
+      // Send successfull response
       res.json({ "success": true });
     }
   });
@@ -744,6 +750,9 @@ router.put("/notifications/set-seen", passport.authenticate("jwt", {"session": f
       res.json({ "success": false });
     }
     else {
+      // Update user's notification account
+      req.user.data.update({ "$set": {"new_notifications": 0}}).exec();
+      // Send successfull response
       res.json({ "success": true });
     }
   });
@@ -769,11 +778,15 @@ router.get("/notifications/latest", passport.authenticate("jwt", {"session": fal
 
 /* DELETE remove a notification */
 router.delete("/notification/:notif_id/remove", passport.authenticate("jwt", {"session": false}), (req, res) => {
-  Notification.remove({ "_id": req.params.notif_id, "owner": req.user.data._id }, (err) => {
+  Notification.findOneAndRemove({ "_id": req.params.notif_id, "owner": req.user.data._id }, (err) => {
     if(err){
       res.json({ "success": false });
     }
     else{
+      // Update user's notification count
+      if(notification.seen === true)
+        req.user.data.update({ "$inc": {"new_notifications": -1}}).exec();
+      // Send successfull response
       res.json({ "success": true });
     }
   });
