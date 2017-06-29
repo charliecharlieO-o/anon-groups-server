@@ -497,7 +497,12 @@ router.post("/request", passport.authenticate("jwt", {"session": false}),(req, r
                   res.json({ "success": false });
                 }
                 else{
-                  user.update({ "$inc": { "new_requests": 1 }}).exec(); // Increment request count
+                  // Notify user
+                  const stringAlias = (req.user.data.alias.handle != null)? `alias ${req.user.data.alias.handle}`: "";
+                  utils.CreateAndSendNotification(request.to.id, `New Networking Request`,
+                    `${req.user.data.username} ${stringAlias} sent you a request`, `/user/${req.user.data.id}/profile`);
+                  // Increment request count
+                  user.update({ "$inc": { "new_requests": 1 }}).exec();
                   res.json({ "success": true });
                 }
               });
