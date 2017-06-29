@@ -118,18 +118,20 @@ router.get("/:user_id/profile", passport.authenticate("jwt", {"session": false})
           }
           else{
             // give limited access
-            User.findById(req.params.user_id, "alias bio profile_pic", (err, user) => {
+            User.findById(req.params.user_id, "alias bio profile_pic contact_info", (err, user) => {
               if(err || !user){
                 res.json({ "success": false });
               }
               else{
+                const contactsCount = (user.contact_info != null)? user.contact_info.length : 0;
                 if(user.alias.handle == null){
-                  user.alias = null;
-                  res.json({ "success": true, "doc": user });
+                  user.alias, user.contact_info = null;
+                  res.json({ "success": true, "doc": user, "networks": contactsCount });
                 }
                 else{
-                  user.bio, user.profile_pic = null;
-                  res.json({ "success": true, "doc": user });
+                  user.profile_pic = null;
+                  user.bio, user.contact_info = null;
+                  res.json({ "success": true, "doc": user, "networks": contactsCount });
                 }
               }
             });

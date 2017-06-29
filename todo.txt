@@ -135,6 +135,7 @@ Enhancements:
 
 Patches:
   - Change poster schema in reply.js to e.g poster_name -> name
+  - Change contact_info in user model to 'networks'
 
 New Features:
   - Users can create and admin their own boards (Just X per user)
