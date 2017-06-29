@@ -544,24 +544,6 @@ router.get("/my-requests", passport.authenticate("jwt", {"session": false}), (re
   });
 });
 
-/* POST accept all info requests */
-router.post("/requests/accept-all", passport.authenticate("jwt", {"session": false}), (req, res) => {
-  Request.update({ "to.id": req.user.data._id, "responded": false },
-  {
-    "$set": {
-      "responded": true,
-      "has_access": true
-    }
-  }, (err) => {
-    if(err){
-      res.json({ "success": false });
-    }
-    else{
-      res.json({ "success": true });
-    }
-  });
-});
-
 /* POST deny all info requests */
 router.post("/requests/deny-all", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Request.update({ "to.id": req.user.data._id, "responded": false },
