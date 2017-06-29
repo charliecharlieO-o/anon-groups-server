@@ -301,7 +301,7 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
                 `${rp} replied to your thread`, `/thread/replies/${reply._id}`);
               }
               // Increment reponses
-              thread.update({"$inc":{"reply_count": 1}});
+              thread.update({"$inc":{"reply_count": 1}}).exec();
               // Return a successfull response
               res.json({ "success": true, "doc": reply });
             }

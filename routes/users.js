@@ -489,7 +489,7 @@ router.post("/request", passport.authenticate("jwt", {"session": false}),(req, r
             res.json({ "success": false });
           }
           else{
-            if(user.new_requests >= settings.max_info_requests){
+            if(user.new_requests < settings.max_info_requests){
               newRequest.to["username"] = user.username;
               newRequest.to["thumbnail_pic"] = user.profile_pic.thumbnail;
               Request.create(newRequest, (err, request) => {
@@ -497,7 +497,7 @@ router.post("/request", passport.authenticate("jwt", {"session": false}),(req, r
                   res.json({ "success": false });
                 }
                 else{
-                  user.update({ "$inc": { "new_requests": 1 }}); // Increment request count
+                  user.update({ "$inc": { "new_requests": 1 }}).exec(); // Increment request count
                   res.json({ "success": true });
                 }
               });
@@ -557,6 +557,9 @@ router.post("/requests/deny-all", passport.authenticate("jwt", {"session": false
       res.json({ "success": false });
     }
     else{
+      // Reset request counter to 0
+      req.user.data.update({ "$set": { "new_requests": 0 }}).exec();
+      // Send successfull response
       res.json({ "success": true });
     }
   });
@@ -608,9 +611,35 @@ router.put("/request/:request_id/respond", passport.authenticate("jwt", {"sessio
     }
     else{
       // Notificate requesting user that he has been accepted
-      if(req.body.has_access == true){
-        utils.createAndSendNotification(request.requested_by.id, `${request.to.username} accepted your request`,
-          "You now have access to user's networking data", `/user/${req.to.id}/profile`);
+      if(request.has_access == true){
+        utils.CreateAndSendNotification(request.requested_by.id, `${request.to.username} accepted your request`,
+          "You now have access to user's networking data", `/user/${request.to.id}/profile`);
+      }
+      // Decrease user's new_requests counter
+      req.user.data.update({ "$inc": { "new_requests": -1 }}).exec();
+      // Send successfull response
+      res.json({ "success": true });
+    }
+  });
+});
+
+/* PUT change an already denied or accepted request */
+router.put("/request/:request_id/edit", passport.authenticate("jwt", {"session": false}), (req, res) => {
+  const accss = (req.body.has_access === "true")? false : true;
+  Request.findOneAndUpdate({ "to.id": req.user.data._id, "_id": req.params.request_id, "has_access": accss,"responded": true },
+  {
+    "$set": {
+      "has_access": req.body.has_access
+    }
+  }, { "new": true }, (err, request) => {
+    if(err || !request){ // If there's an error
+      res.json({ "success": false });
+    }
+    else{
+      // Notificate requesting user that he has been accepted
+      if(request.has_access == true){
+        utils.CreateAndSendNotification(request.requested_by.id, `${request.to.username} accepted your request`,
+          "You now have access to user's networking data", `/user/${request.to.id}/profile`);
       }
       // Send successfull response
       res.json({ "success": true });
@@ -620,13 +649,17 @@ router.put("/request/:request_id/respond", passport.authenticate("jwt", {"sessio
 
 /* DELETE revoke an user's info access */
 router.delete("/request/:request_id/remove", passport.authenticate("jwt", {"session": false}), (req, res) => {
-  Request.remove({ "_id": req.params.request_id, "actors": { "$in": [req.user.data._id]}}, (err) => {
-    if(err){
-      res.json({ "success": false });
-    }
-    else{
-      res.json({ "success": true })
-    }
+  Request.findOne({"_id": req.params.request_id, "actors": { "$in": [req.user.data._id]}}, (err, request) => {
+    request.remove((err) => {
+      if(err){
+        res.json({ "success": false });
+      }
+      else{
+        if(!request.responded)
+          req.user.data.update({ "$inc": { "new_requests": -1 }}).exec();
+        res.json({ "success": true });
+      }
+    });
   });
 });
 
