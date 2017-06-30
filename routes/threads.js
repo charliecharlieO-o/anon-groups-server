@@ -39,6 +39,24 @@ router.get("/hot-top", passport.authenticate("jwt", {"session": false}), (req, r
   });
 });
 
+/* GET X New Threads overall */
+router.get("/new-overall", passport.authenticate("jwt", {"session": false}), (req, res) => {
+  Thread.find(
+    { "alive": true }
+  ).select(
+    thread_list_default
+  ).sort(
+    { "created_at": -1 }
+  ).limit(
+    settings.creme_of_the_top_max
+  ).exec((err, threads) => {
+    if(err || !threads)
+      res.json({ "success": false });
+    else
+      res.json({ "success": true, "doc": threads });
+  });
+});
+
 /* GET thread based on shortid */
 router.get("/:thread_id", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Thread.findOne({ "_id": req.params.thread_id, "alive": true }, (err, thread) => {

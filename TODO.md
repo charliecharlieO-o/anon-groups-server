@@ -54,6 +54,7 @@ Days until deadline: 17
   - Kill Thread: ✔
   - Search Thread: ✔
   - First X Hot Threads Overall: ✔
+  - First X New Threads Overall: ✔
 
 *Replies*
   - Get replies (With subReplies): ✔
