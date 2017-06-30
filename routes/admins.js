@@ -505,9 +505,7 @@ router.put("/solve-issue/:issue_id", passport.authenticate("jwt", {"session": fa
           res.json({ "success": false });
         }
         else{
-          admin.issues_solved = (admin.issues_solved)? admin.issues_solved + 1 : 1;
-          admin.last_resolution = (new Date()).now;
-          admin.save();
+          admin.update({ "last_resolution": (new Date()).now, "$inc": { "issues_solved": 1 }});
           res.json({ "success": true, "doc": issue });
         }
       });

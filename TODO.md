@@ -49,8 +49,8 @@ Days until deadline: 17
   - Post Thread: ✔
   - Get Hot Threads: ✔
   - Get New Threads: ✔
-  - Get Board's Deleted threads: ~
-  - Get Deleted threads overall: ~
+  - Get Board's Deleted threads: ✔
+  - Get Deleted threads overall: ✔
   - Kill Thread: ✔
   - Search Thread: ✔
   - First X Hot Threads Overall: ✔
@@ -64,8 +64,8 @@ Days until deadline: 17
   - Reply to Thread: ✔
   - Reply To Reply: ✔
   - Reply To SubReply: ✔
-  - Update Reply Visibility: +
-  - Delete SubReply: +
+  - Update Reply Visibility: ✔
+  - Delete SubReply: ✔
 
 *Requests*
   - Get Info Request: ✔
@@ -73,12 +73,11 @@ Days until deadline: 17
   - Send Info Request: ✔
   - User's Sent Requests: ✔
   - User's Received Requests: ✔
-  - Accept All Requests: + //Reset request counter in user
-  - Deny All Requests: + //Reset request counter in user
+  - Deny All Requests: ✔
   - Get Friends: ✔
   - Get Foes: ✔
-  - Kill Reply: + //Reset request counter in user
-  - Kill SubReply: + //Reset request counter in user
+  - Kill Reply: ✔
+  - Kill SubReply: ✔
 
 *Admins*
   - Appoint New Admin: ✔
