@@ -140,7 +140,6 @@ Patches:
 
 New Features:
   - Users can create and admin their own boards (Just X per user)
-  - Users can follow other users
   - Users can listen to boards
   - Users can get notifications of accounts they follow
   - Users can have an archive of selected engaging threads or replies they liked

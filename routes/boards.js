@@ -13,7 +13,7 @@ const utils = require("../config/utils"); //System utils
 // Include passport module as passport strategy
 require("../config/passport")(passport);
 
-const board_list_default = "_id slug name short_name last_activity";
+const board_list_default = "_id slug name short_name last_activity image";
 
 /* POST create new board */
 router.post("/", passport.authenticate("jwt", {"session": false}), (req, res) => {
@@ -66,7 +66,7 @@ router.get("/:board_slug", passport.authenticate("jwt", {"session": false}), (re
 
 /* GET the short_name's of all boards */
 router.get("/list/short", passport.authenticate("jwt", {session:false}), (req, res) => {
-	Board.find({ "active": true }, "short_name name slug", {"sort":{"short_name":1}}, (err, boards) => {
+	Board.find({ "active": true }, "short_name name slug image", {"sort":{"short_name":1}}, (err, boards) => {
 		if(err){
 			res.json({ "success": false });
 		}
