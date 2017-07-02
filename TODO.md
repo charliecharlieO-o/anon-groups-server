@@ -84,8 +84,8 @@ Days until deadline: 17
   - Appoint New Admin: ✔
   - Search for Admin (by name): ✔
   - Get Admins Appointed by X User: ✔
-  - Admin List Last Resolution: +
-  - Admin List # Resolutions: +
+  - Admin List Last Resolution: ✔
+  - Admin List # Resolutions: ✔
   - Admin List of Board: ✔
   - Get Admin Info: ✔
   - Admin List of Division: ✔
