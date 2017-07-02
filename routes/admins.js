@@ -117,6 +117,23 @@ router.get("/list/appointed-by/:user_id", passport.authenticate("jwt", {"session
   }
 });
 
+/* GET admins by number of issues solved */
+router.get("/list/by-performance", passport.authenticate("jwt", {"session": false}), (req, res) => {
+  if(req.user.data.is_super || utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
+    Admin.find({}).sort({"issues-solved": -1}).exec((err, admins) => {
+      if(err || !admins){
+        res.json({ "success": false });
+      }
+      else{
+        res.json({ "success": true, "doc": admins });
+      }
+    });
+  }
+  else{
+    res.status(401).send("Unauthorized");
+  }
+});
+
 /* GET admins ordered by recent last resolution */
 router.get("/list/by-resolution", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(req.user.data.is_super ||  utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
