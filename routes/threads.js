@@ -275,8 +275,15 @@ router.post("/search", passport.authenticate("jwt", {"session": false}), (req, r
 
 /* TEST ROUTE FOR TESTING FILE UPLOADS */
 router.post("/upload-test", passport.authenticate("jwt", {"session": false}), utils.UploadMediaFile.single("mfile"), (req, res) => {
-  console.log(req.files);
-  res.send("FINISHED");
+  if(req.file){ // File was uploaded
+    console.log("name: " + req.file.originalname);
+    console.log("location: " + req.file.path);
+    console.log("size: " + req.file.size);
+    res.send(req.file);
+  }
+  else{ // No file was uploaded
+    res.send("NO FILE SENT");
+  }
 });
 
 //=================================================================================

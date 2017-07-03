@@ -106,7 +106,6 @@ const storage = multer.diskStorage({
 });
 // Multer file filter
 const filter = function(req, file, cb){
-  console.log(mime.extension(file.mimetype));
   if(settings.allowed_file_types.includes(mime.extension(file.mimetype))){
     cb(null, true);
   }
