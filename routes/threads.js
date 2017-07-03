@@ -273,6 +273,12 @@ router.post("/search", passport.authenticate("jwt", {"session": false}), (req, r
   });
 });
 
+/* TEST ROUTE FOR TESTING FILE UPLOADS */
+router.post("/upload-test", passport.authenticate("jwt", {"session": false}), utils.UploadMediaFile.single("mfile"), (req, res) => {
+  console.log(req.files);
+  res.send("FINISHED");
+});
+
 //=================================================================================
 //									--	REPLIES --
 //=================================================================================

@@ -18,5 +18,5 @@ module.exports = {
 	"creme_of_the_top_max": 10,
 	"alias_change_rate": 24, // How often can a user change his alias (hours)
 	"max_upload_size": 8388608, // Max file size
-	"allowed_file_types": [".pdf", ".mp3", ".mp4", ".gif", ".jpg", ".webm", ".png", ".ico"]
+	"allowed_file_types": ["pdf", "mp3", "mp4", "gif", "jpeg", "webm", "png", "ico"]
 };

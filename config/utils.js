@@ -1,5 +1,8 @@
 // Import required dependencies for media upload
 const multer = require("multer");
+const path = require("path");
+const crypto = require("crypto");
+const mime = require("mime");
 // Import models required for notification
 const Notification = require("../models/notification");
 const User = require("../models/user");
@@ -93,7 +96,7 @@ const createAndSendNotification = (owner_id, title, description, url, callback) 
 // Multer storage object
 const storage = multer.diskStorage({
   "destination": function(req, file, cb){
-    cb(null, __dirname + "../public/media/");
+    cb(null, __dirname + '/../public/media/');
   },
   "filename": function (req, file, cb) {
     crypto.pseudoRandomBytes(16, function (err, raw) {
@@ -101,18 +104,21 @@ const storage = multer.diskStorage({
     });
   }
 });
+// Multer file filter
+const filter = function(req, file, cb){
+  console.log(mime.extension(file.mimetype));
+  if(settings.allowed_file_types.includes(mime.extension(file.mimetype))){
+    cb(null, true);
+  }
+  else{
+    return cb(new Error("Wrong file format"));
+  }
+};
 // Utility function/middleware to upload a media file
 const uploadMediaFile = multer({
   "storage": storage,
   "limits": {"fileSize": settings.max_upload_size, "files": 1}, // 8 MB max size
-  "fileFilter": function(req, file, cb){
-    if(settings.allowed_file_types.includes(path.extension(file.originalname))){
-      cb(null, true);
-    }
-    else{
-      return cb(new Error("Wrong file format"));
-    }
-  }
+  "fileFilter": filter
 });
 
 module.exports = {
