@@ -22,8 +22,10 @@ const userSchema = new Schema({
 		changed: { type: Date, default: null }
 	},
 	profile_pic: {
-		picture: { type: String  },
-		thumbnail: { type: String  }
+		thumbnail: { type: String },
+		location: { type: String },
+		mimetype: { type: String },
+		size: { type: Number }
 	},
 	bio: { type: String, maxlength: 300, default: null },
 	priviledges: [ { type: String, required: true, enum: settings.priviledges } ],

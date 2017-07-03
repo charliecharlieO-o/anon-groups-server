@@ -8,8 +8,11 @@ const boardSchema = new Schema({
 	short_name: { type: String, required: true, maxlength: 15 },
 	name: { type: String, required: true, maxlength: 100 }, // Text search index
 	image: {
-		file: { type: String, required: true },
-		thumbnail: { type: String, required: true }
+		name: { type: String },
+		location: { type: String },
+		mimetype: { type: String },
+		size: { type: Number },
+		thumbnail: { type: String }
 	},
 	active: { type: Boolean, required: true, default: true },
 	description: { type: String, required: true, maxlength: 500 },

@@ -11,9 +11,11 @@ const subReply = new Schema({
 	poster: posterSchema,
 	to: posterSchema,
 	media: {
-		file: { type: String },
-		thumbnail: { type: String },
-		size: { type: String }
+		name: { type: String },
+		location: { type: String },
+		mimetype: { type: String },
+		size: { type: Number },
+		thumbnail: { type: String }
 	},
 	removed: { type: Boolean, required: true, default: false },
 	text: { type: String, required: true, maxlength: 200 }
@@ -23,9 +25,11 @@ const replySchema = new Schema({
 	thread: { type: Schema.ObjectId, required: true, index: true },
 	poster: posterSchema,
 	media: {
-		file: { type: String },
-		thumbnail: { type: String },
-		size: { type: String }
+		name: { type: String },
+		location: { type: String },
+		mimetype: { type: String },
+		size: { type: Number },
+		thumbnail: { type: String }
 	},
 	removed: { type: Boolean, required: true, default: false },
 	text: { type: String, required: true, maxlength: 500 },

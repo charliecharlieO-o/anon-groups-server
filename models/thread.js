@@ -28,7 +28,8 @@ const threadSchema = new Schema({
 		name: { type: String },
 		location: { type: String },
 		mimetype: { type: String },
-		size: { type: Number }
+		size: { type: Number },
+		thumbnail: { type: String }
 	},
 	reply_excerpts: [ // Will store the first n comment excerpts
 		replyExcerptSchema
