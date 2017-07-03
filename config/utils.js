@@ -1,6 +1,14 @@
+// Import required dependencies for media upload
+const multer = require("multer");
 // Import models required for notification
 const Notification = require("../models/notification");
 const User = require("../models/user");
+// Import system configurations
+const settings = require("./settings");
+
+//=================================================================================
+//									--	ALGORITHMS --
+//=================================================================================
 
 // Check user priviledge (not social priviledge)
 const priviledgeCheck = (priviledgeList, requiredPriviledges) => {
@@ -54,6 +62,10 @@ const parseJSON = (json, callback) => {
   }
 };
 
+//=================================================================================
+//									--	Notifications --
+//=================================================================================
+
 // Create a new notification
 const createAndSendNotification = (owner_id, title, description, url, callback) => {
   // Create the notification in the database and up user notification count
@@ -74,9 +86,39 @@ const createAndSendNotification = (owner_id, title, description, url, callback) 
   });
 };
 
+//=================================================================================
+//									--	MULTER --
+//=================================================================================
+
+// Multer storage object
+const storage = multer.diskStorage({
+  "destination": function(req, file, cb){
+    cb(null, __dirname + "../public/media/");
+  },
+  "filename": function (req, file, cb) {
+    crypto.pseudoRandomBytes(16, function (err, raw) {
+      cb(null, raw.toString('hex') + Date.now() + '.' + mime.extension(file.mimetype));
+    });
+  }
+});
+// Utility function/middleware to upload a media file
+const uploadMediaFile = multer({
+  "storage": storage,
+  "limits": {"fileSize": settings.max_upload_size, "files": 1}, // 8 MB max size
+  "fileFilter": function(req, file, cb){
+    if(settings.allowed_file_types.includes(path.extension(file.originalname))){
+      cb(null, true);
+    }
+    else{
+      return cb(new Error("Wrong file format"));
+    }
+  }
+});
+
 module.exports = {
   "hasRequiredPriviledges": priviledgeCheck,
   "HotAlgorithm": hotAlgorithm,
   "CreateAndSendNotification": createAndSendNotification,
-  "ParseJSON": parseJSON
+  "ParseJSON": parseJSON,
+  "UploadMediaFile": uploadMediaFile
 };

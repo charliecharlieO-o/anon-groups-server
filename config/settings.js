@@ -16,6 +16,7 @@ module.exports = {
 	"max_thread_replies": 500, // Maximum nunmber of replies per thread
 	"max_reply_subreplies": 50, // Maximum number of sub-replies per reply
 	"creme_of_the_top_max": 10,
-	"alias_change_rate": 24 // How often can a user change his alias (hours)
-	// Max file size
+	"alias_change_rate": 24, // How often can a user change his alias (hours)
+	"max_upload_size": 8388608, // Max file size
+	"allowed_file_types": [".pdf", ".mp3", ".mp4", ".gif", ".jpg", ".webm", ".png", ".ico"]
 };
