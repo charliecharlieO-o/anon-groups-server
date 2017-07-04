@@ -279,6 +279,14 @@ router.post("/upload-test", passport.authenticate("jwt", {"session": false}), ut
     console.log("name: " + req.file.originalname);
     console.log("location: " + req.file.path);
     console.log("size: " + req.file.size);
+    console.log("mime: " + req.file.mimetype);
+    // Create thumbnail for file if supported
+    if(settings.image_mime_type.includes(req.file.mimetype)){
+      // Create image thumbnail
+    }
+    else if(settings.video_mime_type.includes(req.file.mimetype)){
+      // Create video thumbnail
+    }
     res.send(req.file);
   }
   else{ // No file was uploaded
