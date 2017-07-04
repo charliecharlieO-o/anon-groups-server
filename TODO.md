@@ -138,14 +138,15 @@ Patches:
   - Change poster schema in reply.js to e.g poster_name -> name
   - Change contact_info in user model to 'networks'
   - Change "board" to "groups" overall in the system
+  - Change "thread" to "post" overall in the system
+  - Amp up system limits
 
 New Features:
   - Users can create and admin their own boards (Just X per user)
   - Users can listen to boards
-  - Users can get notifications of accounts they follow
   - Users can have an archive of selected engaging threads or replies they liked
   - User account can have cellphone number or email if you want the ability to recover
-    but it's not obligatory, account can be done with reCAPTCHA but it ain't recoverable
+    but it's not obligatory, account can be registered with reCAPTCHA but it ain't recoverable
     until user provides that info
   - Replies can be ordered by engagement ranking
   - Has default Desktop Frontend
@@ -153,8 +154,15 @@ New Features:
   - Now SubReply's have text excerpt so people can know what the reply is about
   - Boards can be ranked (based on people following them maybe?)
   - Boards can have tags
-  - User gets notifications of threads he contributed to recently not only the last one
-  - Ability to _mention_ someone in a comment and notify them
+  - Threads can have tags
+  - User gets notifications of threads he contributed to recently
+  - Ability to *@* _mention_ someone in a comment and notify them
   - Notifications have thumbnail field to display on app instead of icon
   - Change username field in /models/user to 'handle' to emulate @handle
-  - Users can listen to a thread for notifications if they contributed?
+  - You can now post up to 5 media files per Thread
+  - Boards can now become private and accessible by *invitation only system*
+  - System will now notify user if there are any _engaging_ threads in the boards he follows
+  - System will now notify user if there are any _popular_ boards emerging
+  - System will have a "popular tags" list
+  - Private Messaging Sub-System
+  - Board Admins may only blacklist people from their boards
