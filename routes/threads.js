@@ -100,10 +100,7 @@ router.post("/:board_slug/post", passport.authenticate("jwt", {"session": false}
           },
           "title": req.body.title,
           "text": req.body.text,
-          "media": {
-            "file": "/some/file.jpg",
-            "size": "12 MB"
-          },
+          "media": null,
           "reply_excerpts": []
         });
         Thread.create(newThread, (err, thread) => {
