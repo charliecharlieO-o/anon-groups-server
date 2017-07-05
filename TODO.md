@@ -1,4 +1,4 @@
-======== v 1.0.0 Release Pre-Alpha ========
+======== v 1.0.0 Banshee Groups Release Pre-Alpha ========
 
 Pending Features:
   - Add socket for notifications
@@ -17,9 +17,9 @@ Pending Patch:
 
 /--  DAY COUNTDOWN  --/
 
-Days until deadline: 17
+Days until deadline: 14
 
-//--- ROUTES, FINISHED? ---//
+//--- FINISHED ROUTES ---//
 
 *Users*
   - Create User: ✔
@@ -125,12 +125,11 @@ Enhancements:
 Patches;
   - Translate messages to Spanish?
 
-======== v 2.0.0 Second Major Release ========
+======== v 1.1.0 Banshee Groups Alpha Release ========
 
 Enhancements:
   - Everything MUST be done with Promises now for better error handling and reduced CALLBACK HELL
   - Code MUST adhere to ES6 standards
-  - Bottlenecks MUST be reduced
   - Separate notifications and requests from users.js
   - Separate replies from threads.js
 
@@ -139,22 +138,31 @@ Patches:
   - Change contact_info in user model to 'networks'
   - Change "board" to "groups" overall in the system
   - Change "thread" to "post" overall in the system
-  - Amp up system limits
 
 New Features:
   - Users can create and admin their own boards (Just X per user)
+  - Replies can be ordered by engagement ranking
+  - User can follow boards
+  - Boards can be ranked (based on people following them maybe?)
+  - Boards can have tags
+  - Threads can have tags
+
+======== v 2.0.0 Second Major Release ========
+
+Enhancements:
+  - Bottlenecks MUST be reduced
+
+Patches:
+  - Amp up system limits
+
+New Features:
   - Users can listen to boards
   - Users can have an archive of selected engaging threads or replies they liked
   - User account can have cellphone number or email if you want the ability to recover
     but it's not obligatory, account can be registered with reCAPTCHA but it ain't recoverable
     until user provides that info
-  - Replies can be ordered by engagement ranking
   - Has default Desktop Frontend
-  - User can have favorite list of boards
   - Now SubReply's have text excerpt so people can know what the reply is about
-  - Boards can be ranked (based on people following them maybe?)
-  - Boards can have tags
-  - Threads can have tags
   - User gets notifications of threads he contributed to recently
   - Ability to *@* _mention_ someone in a comment and notify them
   - Notifications have thumbnail field to display on app instead of icon
