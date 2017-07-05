@@ -274,33 +274,12 @@ router.post("/search", passport.authenticate("jwt", {"session": false}), (req, r
 });
 
 /* TEST ROUTE FOR TESTING FILE UPLOADS */
-const sharp = require("sharp");
 router.post("/upload-test", passport.authenticate("jwt", {"session": false}), utils.UploadMediaFile.single("mfile"), (req, res) => {
-  if(req.file){ // File was uploaded
-    console.log("name: " + req.file.originalname);
-    console.log("location: " + req.file.path);
-    console.log("size: " + req.file.size);
-    console.log("mime: " + req.file.mimetype);
-    // Create thumbnail for file if supported
-    if(settings.image_mime_type.includes(req.file.mimetype)){
-      // Create image thumbnail
-      const name = req.file.filename.substring(0, req.file.filename.length -6);
-      sharp(req.file.path)
-        .resize(250, 200)
-        .min()
-        .toFile(`${req.file.destination}${name}thumb.jpg`, (err) => {
-          if(!err)
-            console.log("Thumbnail created successfully");
-            res.send("Finished upload with thumbnail creation");
-        });
-    }
-    else if(settings.video_mime_type.includes(req.file.mimetype)){
-      // Create video thumbnail
-    }
-  }
-  else{ // No file was uploaded
-    res.send("NO FILE SENT");
-  }
+  utils.ThumbnailGenerator(req.file).then((file) => {
+    res.send("Finished");
+  }).catch((err) => {
+    res.send("Finished");
+  });
 });
 
 //=================================================================================

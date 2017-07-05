@@ -1,8 +1,10 @@
-// Import required dependencies for media upload
+// Import required dependencies for media upload and thumbnail creation
 const multer = require("multer");
 const path = require("path");
 const crypto = require("crypto");
 const mime = require("mime");
+const sharp = require("sharp");
+const ffmpeg = require("fluent-ffmpeg")
 // Import models required for notification
 const Notification = require("../models/notification");
 const User = require("../models/user");
@@ -119,11 +121,56 @@ const uploadMediaFile = multer({
   "limits": {"fileSize": settings.max_upload_size, "files": 1}, // 8 MB max size
   "fileFilter": filter
 });
+// Utility function to generate a thumbnail from the uploaded file
+const thumbnailGenerator = function(multer_file){
+  return new Promise((resolve, reject) => {
+  if(multer_file){ // File was uploaded
+    const thumbnail_name = multer_file.filename.substring(0, multer_file.filename.length -6);
+    const thumbnail_dest = `${multer_file.destination}${thumbnail_name}thumb.jpg`;
+    // Create thumbnail for file if supported
+    if(settings.image_mime_type.includes(multer_file.mimetype)){
+      // Create image thumbnail
+      sharp(multer_file.path)
+        .resize(200, 150)
+        .min()
+        .toFile(thumbnail_dest, (err) => {
+          if(!err){
+            multer_file["thumbnail"] = thumbnail_dest;
+            resolve(multer_file);
+          }
+          else {
+            reject(err);
+          }
+        });
+    }
+    else if(settings.video_mime_type.includes(multer_file.mimetype)){
+      // Create video thumbnail
+      ffmpeg(multer_file.path)
+        .on('end', () => {
+          multer_file["thumbnail"] = thumbnail_dest;
+          resolve(multer_file);
+        })
+        .on('error', () => {
+          reject(new Error("Unable to parse"), null);
+        })
+        .screenshots({
+          "timestamps": ['20%'],
+          "filename": `${thumbnail_name}thumb.png`,
+          "folder": multer_file.destination,
+          "size": "250x200"
+        });
+    }
+  }
+  else{ // No file was uploaded
+    resolve(null);
+  }
+})};
 
 module.exports = {
   "hasRequiredPriviledges": priviledgeCheck,
   "HotAlgorithm": hotAlgorithm,
   "CreateAndSendNotification": createAndSendNotification,
   "ParseJSON": parseJSON,
-  "UploadMediaFile": uploadMediaFile
+  "UploadMediaFile": uploadMediaFile,
+  "ThumbnailGenerator": thumbnailGenerator
 };
