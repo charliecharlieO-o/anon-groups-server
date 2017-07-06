@@ -53,7 +53,7 @@ router.get("/list/by-date", passport.authenticate("jwt", {"session": false}), (r
 /* POST search users with specific priviledge in priviledges array*/
 router.post("/search/by-priviledge", passport.authenticate("jwt", {"session": false}), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["admin_admins"])){
-    utils.ParseJSON(req.body.divisions, (e, divisions) => {
+    utils.parseJSON(req.body.divisions, (e, divisions) => {
       if(divisions && Array.isArray(divisions)){
         User.find({"priviledges": {"$in": divisions}}, default_user_list, { "sort": { "signedup_at": -1 }}, (err, users) => {
           if(err || !users){
@@ -501,7 +501,7 @@ router.post("/request", passport.authenticate("jwt", {"session": false}),(req, r
                 else{
                   // Notify user
                   const stringAlias = (req.user.data.alias.handle != null)? `alias ${req.user.data.alias.handle}`: "";
-                  utils.CreateAndSendNotification(request.to.id, `New Networking Request`,
+                  utils.createAndSendNotification(request.to.id, `New Networking Request`,
                     `${req.user.data.username} ${stringAlias} sent you a request`, `/user/${req.user.data.id}/profile`);
                   // Increment request count
                   user.update({ "$inc": { "new_requests": 1 }}).exec();
@@ -619,7 +619,7 @@ router.put("/request/:request_id/respond", passport.authenticate("jwt", {"sessio
     else{
       // Notificate requesting user that he has been accepted
       if(request.has_access == true){
-        utils.CreateAndSendNotification(request.requested_by.id, `${request.to.username} accepted your request`,
+        utils.createAndSendNotification(request.requested_by.id, `${request.to.username} accepted your request`,
           "You now have access to user's networking data", `/user/${request.to.id}/profile`);
       }
       // Decrease user's new_requests counter
@@ -645,7 +645,7 @@ router.put("/request/:request_id/edit", passport.authenticate("jwt", {"session":
     else{
       // Notificate requesting user that he has been accepted
       if(request.has_access == true){
-        utils.CreateAndSendNotification(request.requested_by.id, `${request.to.username} accepted your request`,
+        utils.createAndSendNotification(request.requested_by.id, `${request.to.username} accepted your request`,
           "You now have access to user's networking data", `/user/${request.to.id}/profile`);
       }
       // Send successfull response

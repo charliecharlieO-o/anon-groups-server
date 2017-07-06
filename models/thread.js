@@ -44,7 +44,7 @@ threadSchema.index({ title: "text" });
 threadSchema.pre("save", function(next){
 	let thread = this;
 	if(thread.isModified("reply_count") || thread.isNew){
-		thread.thread_decay = utils.HotAlgorithm(thread.reply_count, 0, thread.created_at);
+		thread.thread_decay = utils.hotAlgorithm(thread.reply_count, 0, thread.created_at);
 		next();
 	}
 	else{

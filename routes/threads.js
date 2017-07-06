@@ -83,7 +83,7 @@ router.get("/dead/:thread_id", passport.authenticate("jwt", {"session": false}),
 });
 
 /* POST new thread to board (User protected) */
-router.post("/:board_slug/post", passport.authenticate("jwt", {"session": false}), (req, res) => {
+router.post("/:board_slug/post", passport.authenticate("jwt", {"session": false}), utils.uploadMediaFile.single("mfile"), (req, res) => {
   // Check if user can post, Check last time user posted a thread
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["can_post"])){
     Board.findOne({ "slug": req.params.board_slug, "active": true }, "_id", (err, board) => {
@@ -103,13 +103,36 @@ router.post("/:board_slug/post", passport.authenticate("jwt", {"session": false}
           "media": null,
           "reply_excerpts": []
         });
-        Thread.create(newThread, (err, thread) => {
-          if(err || !thread){
-            res.json({ "success": false });
+        // We should validate data here
+        // Create thumbnail and add file to thread if Uploaded
+        utils.thumbnailGenerator(req.file).then((file) => {
+          if(file){
+            newThread.media = {
+              "name": file.originalname,
+              "location": file.path,
+              "mimetype": file.mimetype,
+              "size": file.size,
+              "thumbnail": file.thumbnail
+            };
           }
-          else{
-            res.json({ "success": true, "doc": thread });
-          }
+          Thread.create(newThread, (err, thread) => {
+            if(err || !thread){
+              // Delete Uploaded File & Thumbnail
+              if(req.file)
+                utils.deleteFile(req.file.path);
+              if(file)
+                utils.deleteFile(file.thumbnail);
+              res.json({ "success": false });
+            }
+            else{
+              res.json({ "success": true, "doc": thread });
+            }
+          });
+        }).catch((err) => {
+          // Delete Uploaded File
+          if(req.file)
+            utils.deleteFile(req.file.path);
+          res.send("Finished");
         });
       }
     });
@@ -238,7 +261,7 @@ router.put("/kill/:thread_id", passport.authenticate("jwt", {"session": false}),
       }
       else{
         // Send notification to OP
-        utils.CreateAndSendNotification(thread.poster.id, "Your content was removed",
+        utils.createAndSendNotification(thread.poster.id, "Your content was removed",
           `Your reply was removed due to ${req.body.reason}`, null);
         res.json({ "success": true });
       }
@@ -271,8 +294,8 @@ router.post("/search", passport.authenticate("jwt", {"session": false}), (req, r
 });
 
 /* TEST ROUTE FOR TESTING FILE UPLOADS */
-router.post("/upload-test", passport.authenticate("jwt", {"session": false}), utils.UploadMediaFile.single("mfile"), (req, res) => {
-  utils.ThumbnailGenerator(req.file).then((file) => {
+router.post("/upload-test", passport.authenticate("jwt", {"session": false}), utils.uploadMediaFile.single("mfile"), (req, res) => {
+  utils.thumbnailGenerator(req.file).then((file) => {
     res.send("Finished");
   }).catch((err) => {
     res.send("Finished");
@@ -387,7 +410,7 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
               // Notificate OP about reply if not OP
               if(req.user.data._id !== thread.poster.id){
                 const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username;
-                utils.CreateAndSendNotification(thread.poster.id, "New Thread Reply",
+                utils.createAndSendNotification(thread.poster.id, "New Thread Reply",
                 `${rp} replied to your thread`, `/thread/replies/${reply._id}`);
               }
               // Increment reponses
@@ -460,7 +483,7 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
                   // Send notification
                   if(subReply.to != null){
                     const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username;
-                    utils.CreateAndSendNotification(subReply.to.poster_id, "New Reply",
+                    utils.createAndSendNotification(subReply.to.poster_id, "New Reply",
                     `${rp} replied to you.`, `/thread/replies/${reply._id}`);
                   }
                   res.json({ "success": true });
@@ -494,7 +517,7 @@ router.put("/replies/kill/:reply_id", passport.authenticate("jwt", {"session": f
       }
       else{
         // Send notification to OP
-        utils.CreateAndSendNotification(reply.poster.poster_id, "Your content was removed",
+        utils.createAndSendNotification(reply.poster.poster_id, "Your content was removed",
           `Your reply was removed due to ${req.body.reason}`, null);
         // Send successfull response
         res.json({ "success": true });
@@ -523,7 +546,7 @@ router.put("/replies/kill/:reply_id/:sreply_id", passport.authenticate("jwt", {"
       }
       else{
         // Notify OP
-        utils.CreateAndSendNotification(subreply.replies.id(req.params.sreply_id).poster.poster_id, "Your content was removed",
+        utils.createAndSendNotification(subreply.replies.id(req.params.sreply_id).poster.poster_id, "Your content was removed",
           `Your reply was removed due to ${req.body.reason}`, null);
         // Send successfull response
         res.json({ "success": true });

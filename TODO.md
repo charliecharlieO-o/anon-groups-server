@@ -8,13 +8,6 @@ Pending Features:
 Pending Enhancements:
   - "Autocomplete" for username in admin and user search
 
-Pending Patch:
-
-11.- Start developing user mobile app & admin mobile app
-
-12.- Setup server, buy domain, etc.
-13.- Publish apps
-
 /--  DAY COUNTDOWN  --/
 
 Days until deadline: 14
@@ -124,6 +117,11 @@ Enhancements:
 
 Patches;
   - Translate messages to Spanish?
+
+ToDo:
+  - Start developing user mobile app & admin mobile app
+  - Setup server, buy domain, etc.
+  - Publish apps
 
 ======== v 1.1.0 Banshee Groups Alpha Release ========
 

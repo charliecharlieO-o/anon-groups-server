@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const mime = require("mime");
 const sharp = require("sharp");
 const ffmpeg = require("fluent-ffmpeg")
+const fs = require("fs");
 // Import models required for notification
 const Notification = require("../models/notification");
 const User = require("../models/user");
@@ -12,7 +13,7 @@ const User = require("../models/user");
 const settings = require("./settings");
 
 //=================================================================================
-//									--	ALGORITHMS --
+//									--	ALGORITHMS & FUNCTIONS --
 //=================================================================================
 
 // Check user priviledge (not social priviledge)
@@ -92,7 +93,7 @@ const createAndSendNotification = (owner_id, title, description, url, callback) 
 };
 
 //=================================================================================
-//									--	MULTER --
+//									--	MULTER & MEDIA STORAGE --
 //=================================================================================
 
 // Multer storage object
@@ -132,7 +133,7 @@ const thumbnailGenerator = function(multer_file){
       // Create image thumbnail
       sharp(multer_file.path)
         .resize(200, 150)
-        .min()
+        .max()
         .toFile(thumbnail_dest, (err) => {
           if(!err){
             multer_file["thumbnail"] = thumbnail_dest;
@@ -157,7 +158,7 @@ const thumbnailGenerator = function(multer_file){
           "timestamps": ['20%'],
           "filename": `${thumbnail_name}thumb.png`,
           "folder": multer_file.destination,
-          "size": "250x200"
+          "size": "200x150"
         });
     }
   }
@@ -165,12 +166,26 @@ const thumbnailGenerator = function(multer_file){
     resolve(null);
   }
 })};
+// Delete file from media store
+const deleteFile = function(path, callback){
+  if(path == null)
+    return;
+  fs.unlink(path, (err) => {
+    if(typeof callback === 'function'){
+      return callback(err);
+    }
+    else{
+      return (err == null);
+    }
+  });
+};
 
 module.exports = {
   "hasRequiredPriviledges": priviledgeCheck,
-  "HotAlgorithm": hotAlgorithm,
-  "CreateAndSendNotification": createAndSendNotification,
-  "ParseJSON": parseJSON,
-  "UploadMediaFile": uploadMediaFile,
-  "ThumbnailGenerator": thumbnailGenerator
+  "hotAlgorithm": hotAlgorithm,
+  "createAndSendNotification": createAndSendNotification,
+  "parseJSON": parseJSON,
+  "uploadMediaFile": uploadMediaFile,
+  "thumbnailGenerator": thumbnailGenerator,
+  "deleteFile": deleteFile
 };
