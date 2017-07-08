@@ -44,8 +44,14 @@ threadSchema.index({ title: "text" });
 threadSchema.pre("save", function(next){
 	let thread = this;
 	if(thread.isModified("reply_count") || thread.isNew){
-		thread.thread_decay = utils.hotAlgorithm(thread.reply_count, 0, thread.created_at);
-		next();
+		// Check if post contains image or text
+		if(thread.media || (thread.text && thread.text !== "" && thread.text.match(/^\s*$/) == null)){
+			thread.thread_decay = utils.hotAlgorithm(thread.reply_count, 0, thread.created_at);
+			next();
+		}
+		else{
+			next(new Error("Thread must contain at least media or text"));
+		}
 	}
 	else{
 		return next();
