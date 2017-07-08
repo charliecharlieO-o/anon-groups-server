@@ -1,7 +1,7 @@
 ======== v 1.0.0 Banshee Groups Release Pre-Alpha ========
 
 Pending Features:
-  - Add socket for notifications
+  - Add socket for thread, replies and boards updates
   - Add periodic cleaning routines (Server)
   - Add error log capability
 
@@ -136,6 +136,7 @@ Patches:
   - Change contact_info in user model to 'networks'
   - Change "board" to "groups" overall in the system
   - Change "thread" to "post" overall in the system
+  - Add Geo-Location tag to board
 
 New Features:
   - Users can create and admin their own boards (Just X per user)
@@ -144,6 +145,24 @@ New Features:
   - Boards can be ranked (based on people following them maybe?)
   - Boards can have tags
   - Threads can have tags
+
+======== v 1.2.0 Banshee Groups Beta Release ========
+
+  - Now SubReply's have text excerpt so people can know what the reply is about
+  - Notifications have thumbnail field to display on app instead of icon
+  - You can now post up to 5 media files per Thread Post
+  - Private Messaging Sub-System P2P
+  - Change username field in /models/user to 'handle' to emulate @handle
+  - System will have a "popular tags" list
+  - Add Optional GeoTag to threads
+
+======== v 1.3.0 Banshee Groups Beta Release ========
+
+  - Boards can now become private and accessible by *invitation only system*
+  - Board Admins may only blacklist people from their boards
+  - System will now notify user if there are any _engaging_ threads in the boards he follows
+  - System will now notify user if there are any _popular_ boards emerging in his area
+  - Trending Threads in area
 
 ======== v 2.0.0 Second Major Release ========
 
@@ -154,21 +173,10 @@ Patches:
   - Amp up system limits
 
 New Features:
-  - Users can listen to boards
   - Users can have an archive of selected engaging threads or replies they liked
   - User account can have cellphone number or email if you want the ability to recover
     but it's not obligatory, account can be registered with reCAPTCHA but it ain't recoverable
     until user provides that info
   - Has default Desktop Frontend
-  - Now SubReply's have text excerpt so people can know what the reply is about
   - User gets notifications of threads he contributed to recently
   - Ability to *@* _mention_ someone in a comment and notify them
-  - Notifications have thumbnail field to display on app instead of icon
-  - Change username field in /models/user to 'handle' to emulate @handle
-  - You can now post up to 5 media files per Thread
-  - Boards can now become private and accessible by *invitation only system*
-  - System will now notify user if there are any _engaging_ threads in the boards he follows
-  - System will now notify user if there are any _popular_ boards emerging
-  - System will have a "popular tags" list
-  - Private Messaging Sub-System
-  - Board Admins may only blacklist people from their boards
