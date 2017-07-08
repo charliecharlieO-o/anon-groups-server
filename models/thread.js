@@ -54,7 +54,7 @@ threadSchema.pre("save", function(next){
 		}
 	}
 	else{
-		return next();
+		next();
 	}
 });
 

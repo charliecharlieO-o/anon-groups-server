@@ -21,6 +21,21 @@ const subReply = new Schema({
 	text: { type: String, required: true, maxlength: 200 }
 });
 
+subReply.pre("save", function(next){
+	let subr = this;
+	if(subr.isNew || subr.isModified("media") || subr.isModified("text")){
+		if(subr.media || (subr.text && subr.text !== "" && subr.text.match(/^\s*$/) == null)){
+			next();
+		}
+		else{
+			next(new Error("Reply must contain at least media or text"));
+		}
+	}
+	else{
+		next();
+	}
+});
+
 const replySchema = new Schema({
 	thread: { type: Schema.ObjectId, required: true, index: true },
 	poster: posterSchema,
@@ -35,6 +50,21 @@ const replySchema = new Schema({
 	text: { type: String, required: true, maxlength: 500 },
 	reply_count: { type: Number, required: true, default: 0 },
 	replies: [ subReply ]
-}, { timestamps: { "createdAt": "created_at", "updatedAt": "updated_at" } });
+}, { timestamps: { "createdAt": "created_at", "updatedAt": "updated_at" }});
+
+replySchema.pre("save", function(next){
+	let reply = this;
+	if(reply.isNew || reply.isModified("media") || reply.isModified("text")){
+		if(reply.media || (reply.text && reply.text !== "" && reply.text.match(/^\s*$/) == null)){
+			next();
+		}
+		else{
+			next(new Error("Reply must contain at least media or text"));
+		}
+	}
+	else{
+		next();
+	}
+});
 
 module.exports = mongoose.model("Reply", replySchema);
