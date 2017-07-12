@@ -283,8 +283,10 @@ router.put("/update-profile", passport.authenticate("jwt", {"session": false}), 
 router.put("/alias", passport.authenticate("jwt", {"session": false}), (req, res) => {
   const hours = Math.abs(req.user.data.alias.changed - new Date())/36e5;
   if(req.user.data.alias.handle == null || hours >= settings.alias_change_rate){
+    const value = (req.body.alias || req.body.alias === "" || thread.text.match(/^\s*$/) == null)?
+      null : req.body.alias;
     //Check it's a valid string
-    req.user.data.update({"$set":{"alias.handle": req.body.alias, "changed": new Date()}}, (err) => {
+    req.user.data.update({"$set":{"alias.handle": value, "changed": new Date()}}, (err) => {
       if(err){
         res.json({ "success": false });
       }
