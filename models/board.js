@@ -22,4 +22,6 @@ const boardSchema = new Schema({
 	}
 }, { timestamps: { "createdAt": "created_at", "updatedAt": "updated_at" }});
 
+// On Update check image is not null
+
 module.exports = mongoose.model("Board", boardSchema);

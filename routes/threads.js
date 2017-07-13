@@ -19,7 +19,7 @@ require("../config/passport")(passport);
 //									--	THREADS --
 //=================================================================================
 
-const thread_list_default = "_id title board poster text media reply_count reply_excerpts"
+const thread_list_default = "_id title board poster text media reply_count reply_excerpts created_at"
 
 /* GET X Hot Threads overall */
 router.get("/hot-top", passport.authenticate("jwt", {"session": false}), (req, res) => {
@@ -106,13 +106,13 @@ router.post("/:board_slug/post", passport.authenticate("jwt", {"session": false}
         // We should validate data here
         // Create thumbnail and add file to thread if Uploaded
         utils.thumbnailGenerator(req.file).then((file) => {
-          if(file){
+          if(req.file){
             newThread.media = {
               "name": file.originalname,
               "location": file.path,
               "mimetype": file.mimetype,
               "size": file.size,
-              "thumbnail": file.thumbnail
+              "thumbnail": (file == null)? null : file.thumbnail
             };
           }
           Thread.create(newThread, (err, thread) => {
@@ -132,7 +132,7 @@ router.post("/:board_slug/post", passport.authenticate("jwt", {"session": false}
           // Delete Uploaded File
           if(req.file)
             utils.deleteFile(req.file.path);
-          res.send("Finished");
+          res.json({ "success": false });
         });
       }
     });
@@ -367,13 +367,14 @@ router.get("/replies/:reply_id", (req, res) => {
 });
 
 /* POST a new reply to a thread based on shortid */ //(GENERATES NOTIFICATION)
-router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}), (req, res) => {
+router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}), utils.uploadMediaFile.single("mfile"), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["can_reply"])){
     Thread.findOne({ "_id": req.params.thread_id, "alive": true, "reply_count": { "$lt":settings.max_thread_replies }}, (err, thread) => {
       if(err || !thread){
         res.status(404).send("Thread Not Found");
       }
       else{
+        // Build reply
         let newReply = new Reply({
           "thread": thread._id,
           "poster": {
@@ -381,32 +382,29 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
             "poster_thumbnail": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
             "poster_id": req.user.data._id
           },
-          "media": {
-            "file": "/test/file.jpg",
-            "thumbnail": "/test/thumbnail.png",
-            "size": "10 MB"
-          },
+          "media": null,
           "text": req.body.text,
           "replies": []
         });
-        newReply.save((err, reply) => {
-          // Add an excerpt if needed
-          if(thread.reply_excerpts.length < settings.excerpts_per_thread){
-            thread.reply_excerpts.push({
-              "reply_id": reply._id,
-              "poster_name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
-              "poster_id": req.user.data._id,
-              "poster_pic": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
-              "text_excerpt": reply.text.substring(0, settings.excerpts_substring)
-            });
-          }
-          thread.save((err) => {
+        // Create thumbnail and add file to reply if Uploaded
+        utils.thumbnailGenerator(req.file).then((file) => {
+          // Add media to reply
+          newReply.media = (file)?
+            {
+              "name": file.originalname,
+              "location": file.path,
+              "mimetype": file.mimetype,
+              "size": file.size,
+              "thumbnail": (file == null)? null : file.thumbnail
+            }: null;
+          // Save Reply
+          newReply.save((err, reply) => {
             if(err){
-              // If it failed let us delete the reply
-              Reply.remove({ "_id": reply._id });
-              res.json({ "success": false, "error": 108 });
+              res.json({"success": false});
             }
-            else{
+            else {
+              // Return a successfull response
+              res.json({ "success": true, "doc": reply });
               // Notificate OP about reply if not OP
               if(req.user.data._id !== thread.poster.id){
                 const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username;
@@ -415,10 +413,24 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
               }
               // Increment reponses
               thread.update({"$inc":{"reply_count": 1}}).exec();
-              // Return a successfull response
-              res.json({ "success": true, "doc": reply });
+              // Push reply excerpt to thread for display
+              if(thread.reply_excerpts.length < settings.excerpts_per_thread){
+                thread.reply_excerpts.push({
+                  "reply_id": reply._id,
+                  "poster_name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
+                  "poster_id": req.user.data._id,
+                  "poster_pic": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
+                  "text_excerpt": reply.text.substring(0, settings.excerpts_substring)
+                });
+                thread.save();
+              }
             }
           });
+        }).catch((err) => {
+          // Delete Uploaded File
+          if(req.file)
+            utils.deleteFile(req.file.path);
+          res.json({ "success": false });
         });
       }
     });
@@ -429,7 +441,7 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
 });
 
 /* POST a SubReply to a Reply */ //(GENERATES NOTIFICATION)
-router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", {"session": false}), (req, res) => {
+router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", {"session": false}), utils.uploadMediaFile.single("mfile"), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["can_reply"])){
     Thread.findById(req.params.thread_id, "alive reply_count", (err, thread) => {
       if(err || !thread || !thread.alive || thread.reply_count >= settings.max_thread_replies){
@@ -468,26 +480,44 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
                   "poster_id": req.user.data._id
                 },
                 "to": to,
-                "media": {
-                  "file": "/test/imaage.jpg",
-                  "thumbnail": "/test/thumb.png",
-                  "size": "27 MB"
-                },
+                "media": null,
                 "text": req.body.text
               };
-              reply.update({ "$push": { "replies": subReply }, "$inc": { "reply_count": 1 }}, (err) => {
-                if(err){
-                  res.json({ "success": false });
-                }
-                else{
-                  // Send notification
-                  if(subReply.to != null){
-                    const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username;
-                    utils.createAndSendNotification(subReply.to.poster_id, "New Reply",
-                    `${rp} replied to you.`, `/thread/replies/${reply._id}`);
-                  }
-                  res.json({ "success": true });
-                }
+              utils.thumbnailGenerator(req.file).then((file) => {
+                // Add media to reply
+                subReply.media = (file)?
+                  {
+                    "name": file.originalname,
+                    "location": file.path,
+                    "mimetype": file.mimetype,
+                    "size": file.size,
+                    "thumbnail": (file == null)? null : file.thumbnail
+                  }: null;
+                  // Push to subreply array
+                  reply.update({ "$push": { "replies": subReply }, "$inc": { "reply_count": 1 }}, (err) => {
+                    if(err){
+                      res.json({ "success": false });
+                    }
+                    else{
+                      res.json({ "success": true });
+                      // Notificate OP
+                      const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username;
+                      if(req.user.data._id != reply.poster.poster_id){
+                        utils.createAndSendNotification(reply.poster.poster_id, "New Reply",
+                          `${rp} replied to your comment.`, `/thread/replies/${reply._id}`);
+                      }
+                      // Send notification to 'TO'
+                      if(subReply.to != null){
+                        utils.createAndSendNotification(subReply.to.poster_id, "New Reply",
+                        `${rp} replied to you.`, `/thread/replies/${reply._id}`);
+                      }
+                    }
+                  });
+              }).catch((err) => {
+                // Delete Uploaded File
+                if(req.file)
+                  utils.deleteFile(req.file.path);
+                res.json({ "success": false });
               });
             });
           }

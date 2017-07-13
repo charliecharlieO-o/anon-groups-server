@@ -149,8 +149,10 @@ router.post("/register", (req, res) => {
 		"password": req.body.password,
     "alias": req.body.alias,
     "profile_pic": {
-      "picture": "/default/def.jpg",
-      "thumbnail": "/default/def.jpg"
+      "thumbnail": null,
+      "location": null,
+      "mimetype": null,
+      "size": null
     },
     "bio": req.body.bio,
 		"contact_info": [],
@@ -277,6 +279,40 @@ router.put("/update-profile", passport.authenticate("jwt", {"session": false}), 
 });
 
 /* PUT update profile picture */
+router.put("/profile-pic", passport.authenticate("jwt", {"session": false}), utils.uploadMediaFile.single("mfile"), (req, res) => {
+  if(settings.image_mime_type.includes(req.file.mimetype)){
+    utils.thumbnailGenerator(req.file).then((file) => {
+      const picture = {
+        "thumbnail": file.thumbnail,
+        "location": file.path,
+        "mimetype": file.mimetype,
+        "size": file.size
+      };
+      User.findByIdAndUpdate(req.user.data._id, {"$set": {"profile_pic": picture}}, {"new": true}, (err, user) => {
+        if(err || !user){
+          res.json({"success": false});
+          utils.deleteFile(req.file.path); // :(
+          utils.deleteFile(file.thumbnail);
+        }
+        else{
+          res.json({"success": true});
+        }
+      });
+    }).catch((err) => {
+      res.json({"success": false});
+      // Delete Uploaded File
+      if(req.file)
+        utils.deleteFile(req.file.path); // :(
+    });
+  }
+  else{
+    res.json({"success": false});
+    // Delete Uploaded File
+    if(req.file)
+      utils.deleteFile(req.file.path); // :(
+  }
+});
+
 /* PUT change phone number */
 
 /* PUT change user alias */

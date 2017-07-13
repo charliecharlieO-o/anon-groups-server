@@ -152,7 +152,7 @@ const thumbnailGenerator = function(multer_file){
           resolve(multer_file);
         })
         .on('error', () => {
-          reject(new Error("Unable to parse"), null);
+          reject(new Error("Unable to parse"));
         })
         .screenshots({
           "timestamps": ['20%'],
@@ -160,6 +160,9 @@ const thumbnailGenerator = function(multer_file){
           "folder": multer_file.destination,
           "size": "200x150"
         });
+    }
+    else{
+      resolve(null);
     }
   }
   else{ // No file was uploaded

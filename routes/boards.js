@@ -16,15 +16,12 @@ require("../config/passport")(passport);
 const board_list_default = "_id slug name short_name last_activity image";
 
 /* POST create new board */
-router.post("/", passport.authenticate("jwt", {"session": false}), (req, res) => {
+router.post("/", passport.authenticate("jwt", {"session": false}), utils.uploadMediaFile.single("mfile"), (req, res) => {
 	if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["create_board"])){
 		let newBoard = new Board({
 			"slug": shortid.generate(),
 			"name": req.body.name,
-			"image": {
-				"file": "/media/file.jpg",
-				"thumbnail": "/media/thumbnail/th.png"
-			},
+			"image": null,
 			"short_name": req.body.short_name,
 			"description": req.body.description,
 			"created_by": {
@@ -32,19 +29,43 @@ router.post("/", passport.authenticate("jwt", {"session": false}), (req, res) =>
 				"id": req.user.data._id
 			}
 		});
-		Board.create(newBoard, (err, board) => {
-			if(err){
-				// Check for validation errors
-				res.json({ "success": false });
-			}
-			else{
-				//Return successful board creation
-				res.json({ "success": true, "doc": board });
-			}
-		});
+		// Check if file is image type file
+		if(req.file && settings.image_mime_type.includes(req.file.mimetype)){
+			utils.thumbnailGenerator(req.file).then((file) => {
+				newBoard.image = {
+					"name": file.originalname,
+					"location": file.path,
+					"mimetype": file.mimetype,
+					"size": file.size,
+					"thumbnail": file.thumbnail
+				};
+				Board.create(newBoard, (err, board) => {
+					if(err){
+						// Check for validation errors
+						res.json({ "success": false });
+						utils.deleteFile(req.file.path);
+						utils.deleteFile(newBoard.thumbnail);
+					}
+					else{
+						res.json({ "success": true, "doc": board });
+					}
+				});
+			}).catch((err) => {
+				res.json({"success": false});
+				if(req.file)
+					utils.deleteFile(req.file.path); // Delete file, this repeats A LOT
+			});
+		}
+		else{
+			res.json({"success": false});
+			if(req.file)
+				utils.deleteFile(req.file.path); // A LOT
+		}
 	}
 	else{
 		res.status(401).send("Unauthorized");
+		if(req.file)
+			utils.deleteFile(req.file.path); // A LOT!
 	}
 });
 
@@ -77,27 +98,50 @@ router.get("/list/short", passport.authenticate("jwt", {session:false}), (req, r
 });
 
 /* PUT change board image */
-router.put("/:board_slug/image", passport.authenticate("jwt", {"session": false}), (req, res) => {
+router.put("/:board_slug/image", passport.authenticate("jwt", {"session": false}), utils.uploadMediaFile.single("mfile"), (req, res) => {
 	if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["edit_board"])){
-		Board.findOneAndUpdate({ "slug": req.params.board_slug },
-		{
-			"$set": {
-				"image":{
-					"file": "/media/file1.jpg",
-					"thumbnail": "/media/thumbnail/th1.png"
-				}
-			}
-		}, { "new": true }, (err, board) => {
-			if(err || !board){
-				res.json({ "success": false });
-			}
-			else{
-				res.json({ "success": true });
-			}
-		});
+		// Check if file is image type file
+		if(req.file && settings.image_mime_type.includes(req.file.mimetype)){
+			utils.thumbnailGenerator(req.file).then((file) => {
+				const image = {
+					"name": file.originalname,
+					"location": file.path,
+					"mimetype": file.mimetype,
+					"size": file.size,
+					"thumbnail": file.thumbnail
+				};
+				Board.findOneAndUpdate({ "slug": req.params.board_slug },
+				{
+					"$set": {
+						"image":image
+					}
+				}, { "new": true }, (err, board) => {
+					if(err || !board){
+						res.json({ "success": false });
+						// PLEASE STOP THE MADNESS! (callback hell)
+						utils.deleteFile(req.file.path);
+						utils.deleteFile(image.thumbnail);
+					}
+					else{
+						res.json({ "success": true });
+					}
+				});
+			}).catch((err) => {
+				res.json({"success": false});
+				if(req.file)
+					utils.deleteFile(req.file.path); // Delete file, this repeats A LOT
+			});
+		}
+		else{
+			res.json({"success": false});
+			if(req.file)
+				utils.deleteFile(req.file.path); // A LOT
+		}
 	}
 	else{
 		res.status(401).send("Unauthorized");
+		if(req.file)
+			utils.deleteFile(req.file.path); // A LOT!
 	}
 });
 
@@ -164,21 +208,5 @@ router.get("/list/new", passport.authenticate("jwt", {"session": false}), (req, 
 		}
 	});
 });
-
-/* PUT delete admin from board
-router.put("/:board_slug/admins/remove", passport.authenticate("jwt", {"session": false}), (req, res) => {
-	// Check if user can update and remove admins
-	// Preprocess and clean data
-	Board.update({ "slug": req.params.board_slug },
-	{ "$pull": {"admins":{"_id":req.body.admin_reg_id }}},
-	{ "safe": true }, (err, board) => {
-		if(err || !board){
-			res.json({ "success": false });
-		}
-		else{
-			res.json({ "success": true, "doc": board });
-		}
-	});
-});*/
 
 module.exports = router;

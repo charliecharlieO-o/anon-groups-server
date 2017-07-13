@@ -22,7 +22,7 @@ const replyExcerptSchema = new Schema({
 const threadSchema = new Schema({
 	board: { type: Schema.ObjectId },
 	poster: posterSchema,
-	title: { type: String, required: true, maxlength: 100 },
+	title: { type: String, required: true, maxlength: 100 },//30 ideal max
 	text: { type: String, maxlength: 500 },
 	media: {
 		name: { type: String },
@@ -43,7 +43,7 @@ threadSchema.index({ title: "text" });
 
 threadSchema.pre("save", function(next){
 	let thread = this;
-	if(thread.isModified("reply_count") || thread.isNew){
+	if(thread.isNew || thread.isModified("text") || thread.isModified("media")){
 		// Check if post contains image or text
 		if(thread.media || (thread.text && thread.text !== "" && thread.text.match(/^\s*$/) == null)){
 			thread.thread_decay = utils.hotAlgorithm(thread.reply_count, 0, thread.created_at);
