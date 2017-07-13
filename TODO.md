@@ -1,12 +1,9 @@
-======== v 1.0.0 Banshee Groups Release Pre-Alpha ========
+======== v 0.1.0 Banshee Groups Release Alpha ========
 
 Pending Features:
   - Add socket for thread, replies and boards updates
   - Add periodic cleaning routines (Server)
   - Add error log capability
-
-Pending Enhancements:
-  - "Autocomplete" for username in admin and user search
 
 /--  DAY COUNTDOWN  --/
 
@@ -123,7 +120,7 @@ ToDo:
   - Setup server, buy domain, etc.
   - Publish apps
 
-======== v 1.1.0 Banshee Groups Alpha Release ========
+======== v 1.1.0 Banshee Groups Pre-Beta Release ========
 
 Enhancements:
   - Everything MUST be done with Promises now for better error handling and reduced CALLBACK HELL
@@ -137,6 +134,7 @@ Patches:
   - Change "board" to "groups" overall in the system
   - Change "thread" to "post" overall in the system
   - Add Geo-Location tag to board
+  - "Autocomplete" for username in admin and user search
 
 New Features:
   - Users can create and admin their own boards (Just X per user)
