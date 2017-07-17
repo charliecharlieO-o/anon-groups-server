@@ -441,7 +441,8 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
 });
 
 /* POST a SubReply to a Reply */ //(GENERATES NOTIFICATION)
-router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", {"session": false}), utils.uploadMediaFile.single("mfile"), (req, res) => {
+router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", {"session": false}),
+  utils.uploadMediaFile.single("mfile"), (req, res) => {
   if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["can_reply"])){
     Thread.findById(req.params.thread_id, "alive reply_count", (err, thread) => {
       if(err || !thread || !thread.alive || thread.reply_count >= settings.max_thread_replies){
@@ -454,38 +455,101 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
             res.json({ "success": false });
           }
           else{
-            User.findById(req.body.to, "_id username profile_pic alias", (err, user) => {
-              // Prepare 'to' field you can post on your own sub-replies with null
-              let to = null;
-              // If user isn't addressing himself (he is OP or it's his id) create 'to' field
-              if(user != null && (!reply.poster.poster_id.equals(req.user.data._id) || !user._id.equals(req.user.data._id))){
-                to = {
-                  "poster_name": (user.alias.handle != null)? user.alias.handle : user.username,
-                  "poster_thumbnail": (user.alias.handle != null)? "anon": user.profile_pic.thumbnail,
-                  "poster_id": user._id
-                };
-              }
-              else if(user == null && !req.user.data._id.equals(reply.poster.poster_id)){
-                to = {
-                  "poster_name": reply.poster.poster_name,
-                  "poster_thumbnail": reply.poster.poster_thumbnail,
-                  "poster_id": reply.poster.poster_id
-                };
-              }
-              // Prepare subDoc
-              let subReply = {
+            // Prepare SubDocument
+            let subReply = {
+              "poster": {
+                "poster_name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
+                "poster_thumbnail": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
+                "poster_id": req.user.data._id
+              },
+              "to": {
+                "poster_name": reply.poster.poster_name,
+                "poster_id": reply.poster.poster_id,
+                "poster_thumbnail": reply.poster.poster_thumbnail
+              },
+              "media": null,
+              "text": req.body.text
+            };
+            utils.thumbnailGenerator(req.file).then((file) => {
+              // Add media to reply
+              subReply.media = (file)?
+                {
+                  "name": file.originalname,
+                  "location": file.path,
+                  "mimetype": file.mimetype,
+                  "size": file.size,
+                  "thumbnail": (file == null)? null : file.thumbnail
+                }: null;
+                // Push to subreply array
+                reply.update({ "$push": { "replies": subReply }, "$inc": { "reply_count": 1 }}, (err) => {
+                  if(err){
+                    res.json({ "success": false });
+                  }
+                  else{
+                    res.json({ "success": true });
+                    // Notificate OP
+                    const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username;
+                    if(req.user.data._id != reply.poster.poster_id){
+                      utils.createAndSendNotification(reply.poster.poster_id, "New Reply",
+                        `${rp} replied under your comment.`, `/thread/replies/${reply._id}`);
+                    }
+                    // Send notification to 'TO'
+                    if(subReply.to != null){
+                      utils.createAndSendNotification(subReply.to.poster_id, "New Reply",
+                      `${rp} replied to you.`, `/thread/replies/${reply._id}`);
+                    }
+                  }
+                });
+            }).catch((err) => {
+              // Delete Uploaded File
+              if(req.file)
+                utils.deleteFile(req.file.path);
+              res.json({ "success": false });
+            });
+          }
+        });
+      }
+    });
+  }
+  else{
+    res.status(401).send("Unauthorized");
+  }
+});
+
+/* POST a SubReply to a SubReply */
+router.post("/:thread_id/replies/:reply_id/:sub_id/reply", passport.authenticate("jwt", {"session": false}),
+  utils.uploadMediaFile.single("mfile"), (req, res) => {
+    if(utils.hasRequiredPriviledges(req.user.data.priviledges, ["can_reply"])){ // Check priviledges
+      Thread.findById(req.params.thread_id, "alive reply_count", (err, thread) => { // FInd current thread
+        if(err || !thread || !thread.alive || thread.reply_count >= settings.max_thread_replies){
+          res.status(404).send("Thread Not Found");
+        }
+        else{
+          Reply.findOne({ "_id": req.params.reply_id, "replies._id":req.params.sub_id,
+          "reply_count": { "$lt": settings.max_reply_subreplies }}, (err, reply) => {
+            if(err || !reply){
+              res.json({ "success": false });
+            }
+            else{
+              const subreply = reply.replies.id(req.params.sub_id);
+              // Prepare SubDocument
+              let newSubReply = {
                 "poster": {
                   "poster_name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
                   "poster_thumbnail": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
                   "poster_id": req.user.data._id
                 },
-                "to": to,
+                "to": {
+                  "poster_name": subreply.poster.poster_name,
+                  "poster_id": subreply.poster.poster_id,
+                  "poster_thumbnail": subreply.poster.poster_thumbnail
+                },
                 "media": null,
                 "text": req.body.text
               };
               utils.thumbnailGenerator(req.file).then((file) => {
                 // Add media to reply
-                subReply.media = (file)?
+                newSubReply.media = (file)?
                   {
                     "name": file.originalname,
                     "location": file.path,
@@ -494,7 +558,7 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
                     "thumbnail": (file == null)? null : file.thumbnail
                   }: null;
                   // Push to subreply array
-                  reply.update({ "$push": { "replies": subReply }, "$inc": { "reply_count": 1 }}, (err) => {
+                  reply.update({ "$push": { "replies": newSubReply }, "$inc": { "reply_count": 1 }}, (err) => {
                     if(err){
                       res.json({ "success": false });
                     }
@@ -504,11 +568,11 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
                       const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username;
                       if(req.user.data._id != reply.poster.poster_id){
                         utils.createAndSendNotification(reply.poster.poster_id, "New Reply",
-                          `${rp} replied to your comment.`, `/thread/replies/${reply._id}`);
+                          `${rp} replied under your comment.`, `/thread/replies/${reply._id}`);
                       }
                       // Send notification to 'TO'
-                      if(subReply.to != null){
-                        utils.createAndSendNotification(subReply.to.poster_id, "New Reply",
+                      if(newSubReply.to != null){
+                        utils.createAndSendNotification(newSubReply.to.poster_id, "New Reply",
                         `${rp} replied to you.`, `/thread/replies/${reply._id}`);
                       }
                     }
@@ -519,15 +583,14 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
                   utils.deleteFile(req.file.path);
                 res.json({ "success": false });
               });
-            });
-          }
-        });
-      }
-    });
-  }
-  else{
-    res.status(401).send("Unauthorized");
-  }
+            }
+          });
+        }
+      });
+    }
+    else{
+      res.status(401).send("Unauthorized");
+    }
 });
 
 /* PUT update reply visibility */ //(GENERATES NOTIFICATION)

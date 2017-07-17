@@ -1,7 +1,7 @@
 ======== v 0.1.0 Banshee Groups Release Alpha ========
 
 Pending Features:
-  - Add socket for thread, replies and boards updates
+  - Add socket for thread comments
   - Add periodic cleaning routines (Server)
   - Add error log capability
 
