@@ -135,6 +135,7 @@ Patches:
   - Change "thread" to "post" overall in the system
   - Add Geo-Location tag to board
   - "Autocomplete" for username in admin and user search
+  - Remove slug field from boards/groups as it's innecessary
 
 New Features:
   - Users can create and admin their own boards (Just X per user)
