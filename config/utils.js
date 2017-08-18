@@ -18,8 +18,8 @@ const settings = require("./settings");
 
 // Check user priviledge (not social priviledge)
 const priviledgeCheck = (priviledgeList, requiredPriviledges) => {
-  for(let i = 0; i < requiredPriviledges.length; i++){
-    if(!priviledgeList.includes(requiredPriviledges[i])){
+  for(let i in requiredPriviledges){
+    if(!priviledgeList.includes(requiredPriviledges[i]){
       return false;
     }
   }
