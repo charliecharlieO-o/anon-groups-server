@@ -1,0 +1,2073 @@
+{
+	"variables": [],
+	"info": {
+		"name": "BoardsIO",
+		"_postman_id": "a7235f94-5156-a46a-a791-1210b2a660ff",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admins",
+			"description": "This folder contains all the routes designated to manage Admin Resource Objects.",
+			"item": [
+				{
+					"name": "Appoint New Admin",
+					"request": {
+						"url": "127.0.0.1:3000/admin/appoint",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzYyMjY2MzQ1OSwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.D5ZlPJwrIoFqgi_RVT4N4mUXJ34nz9tNRa_XAwtr4OVekHR8iesSjhhdeg_aGeDsge2Hlm6iw4yd5yR7148VjA",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "user_id",
+									"value": "5943e5d583350957c895e1f7",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Creates a new admin record with priviledges for a specific board"
+					},
+					"response": []
+				},
+				{
+					"name": "Admins Appointed By X User",
+					"request": {
+						"url": "127.0.0.1:3000/admin/list/appointed-by/5943e5d583350957c895e1f7",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY1ODk2NTAwMiwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.TLifgjaFwERr1-CC4DXZX7TAvrRzKMPOr8GNI3Phjw1R84DIQRUTzTgXIRArSv57idtfIU8A0aflUXl9mBca_A",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets a list of all admin records appointed by a specific user."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Admins of a Board",
+					"request": {
+						"url": "127.0.0.1:3000/admin/list/board/r1116d5fb",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY1NTY1MjE5NSwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.yTE5oeOH3aDHC10RKU3SKutIjq_guA2Iq8VteV0cYDzqw0VHxwxkMrTbY0iQly_Hh40caabXndUR_GkqpSGJdw",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets a list of all admin records which are in charge of the same board."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Admin Info",
+					"request": {
+						"url": "127.0.0.1:3000/admin/uid/593aff8e98bf5854ac2c9bae",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY1OTc2NjgyNiwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.8Jh_7m8D5jxXJPrGRiGiP4o8mkbNOE0NHMZpm10kq888jVPkpMrC4JSxgR2s673twNSrHa6x91EgMB1Ra2ldPQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets an admin's record based on his user_id"
+					},
+					"response": []
+				},
+				{
+					"name": "List All Admins",
+					"request": {
+						"url": "127.0.0.1:3000/admin/list-all",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY3NTE4NDAzOCwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.b6KrrEpeLOVmmKS9BIGFmaCZ_B9_XJTkdBszR3EmDaWjzpkDB0F4gow0KpPM_fDE8RSyJGsCTbX44G2i7nsMnw",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets a list of all the admin records ordered by  name"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove an Admin Record",
+					"request": {
+						"url": "127.0.0.1:3000/admin/remove/5933367c8728297cb5e30e0e",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NjA2OTY4MDk5OSwiaXNzIjoiNTkyYzM1MWQyZjE0ZWYyOWU0YTk3ZTgyIn0.HNq4KX2yFv3LyGkvoWbuYX5ghflBnvFZdWoY3gFYGdAQpf_XrerUZPO9TcmkXEo7Z3ZVK7Xdpx_OZx2iAO-KHg",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Deletes a record indicating a user's admin priviledges to a board."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Admin",
+					"request": {
+						"url": "127.0.0.1:3000/admin/search",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY1NTY1MjE5NSwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.yTE5oeOH3aDHC10RKU3SKutIjq_guA2Iq8VteV0cYDzqw0VHxwxkMrTbY0iQly_Hh40caabXndUR_GkqpSGJdw",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "almaKaren",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Search by an admin by name."
+					},
+					"response": []
+				},
+				{
+					"name": "List by Division",
+					"request": {
+						"url": "127.0.0.1:3000/admin/list/division/SPAM",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY3NTE4NDAzOCwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.b6KrrEpeLOVmmKS9BIGFmaCZ_B9_XJTkdBszR3EmDaWjzpkDB0F4gow0KpPM_fDE8RSyJGsCTbX44G2i7nsMnw",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "List admins filtered by specific system division."
+					},
+					"response": []
+				},
+				{
+					"name": "Reassign Board",
+					"request": {
+						"url": "127.0.0.1:3000/admin/reassign/board",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY3NTE4NDAzOCwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.b6KrrEpeLOVmmKS9BIGFmaCZ_B9_XJTkdBszR3EmDaWjzpkDB0F4gow0KpPM_fDE8RSyJGsCTbX44G2i7nsMnw",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "admin_id",
+									"value": "594ee180e75efd70dcd0ca53",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "board_id",
+									"value": "593cfbf2b57e8307f74bc065",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Assigns a board to an admin."
+					},
+					"response": []
+				},
+				{
+					"name": "Reassign Divisions",
+					"request": {
+						"url": "127.0.0.1:3000/admin/reassign/divisions",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY3NTE4NDAzOCwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.b6KrrEpeLOVmmKS9BIGFmaCZ_B9_XJTkdBszR3EmDaWjzpkDB0F4gow0KpPM_fDE8RSyJGsCTbX44G2i7nsMnw",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "admin_id",
+									"value": "594ee180e75efd70dcd0ca53",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "divisions",
+									"value": "[\"SPAM\",\"ILLEGAL\"]",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Assigns divisions to an admin."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Admin",
+					"request": {
+						"url": "127.0.0.1:3000/admin/remove",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY3NTE4NDAzOCwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.b6KrrEpeLOVmmKS9BIGFmaCZ_B9_XJTkdBszR3EmDaWjzpkDB0F4gow0KpPM_fDE8RSyJGsCTbX44G2i7nsMnw",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "admin_id",
+									"value": "5949a9572093cf0e729fcb66",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Delete an admin from the admin registry."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Admin Info (admin id)",
+					"request": {
+						"url": "127.0.0.1:3000/admin/id/5949a9572093cf0e729fcb66",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY1OTc2NjgyNiwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.8Jh_7m8D5jxXJPrGRiGiP4o8mkbNOE0NHMZpm10kq888jVPkpMrC4JSxgR2s673twNSrHa6x91EgMB1Ra2ldPQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets an admin's record based on his admin_id"
+					},
+					"response": []
+				},
+				{
+					"name": "List By Performance",
+					"request": {
+						"url": "127.0.0.1:3000/admin/list/by-performance",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODk1NjYwOTc4NSwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.JRH6XfFcYzATpgsFnuJIu9EnSABa4bCn15sExstvG1ugLs7mszuP8xLW6Ws9uIA_ngE27P9MVfzwmX1_q8QZng",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Write route so super user or admin_admins can list users by \"performance\" i.e number of issues solved."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Boards",
+			"description": "This folder contains all the routes designated to manage Board Resource Objects.",
+			"item": [
+				{
+					"name": "Create Board",
+					"request": {
+						"url": "127.0.0.1:3000/board/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzE2OTAzODM0MywiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.dgZ8dDKqYIqv4ZutV0Kn9zUr3-8S7fP6ZNhxbz8I6D15tOPwR7zblgm9kvhvyhP0ux9ysaRDkPgeRM6jHp4ShA",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "centro universitario de ciencias biologicas y agropecuarias",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "short_name",
+									"value": "cucba",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "description",
+									"value": "Aqui crian animales y plantan cosas",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "mfile",
+									"type": "file",
+									"enabled": true,
+									"src": "vacations_with_bae.jpg"
+								}
+							]
+						},
+						"description": "Creates a new board"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Board",
+					"request": {
+						"url": "127.0.0.1:3000/board/S1cg2ucG-",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzE2OTAzODM0MywiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.dgZ8dDKqYIqv4ZutV0Kn9zUr3-8S7fP6ZNhxbz8I6D15tOPwR7zblgm9kvhvyhP0ux9ysaRDkPgeRM6jHp4ShA",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets board info based on slug."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Board List",
+					"request": {
+						"url": "127.0.0.1:3000/board/list/short",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzE2OTAzODM0MywiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.dgZ8dDKqYIqv4ZutV0Kn9zUr3-8S7fP6ZNhxbz8I6D15tOPwR7zblgm9kvhvyhP0ux9ysaRDkPgeRM6jHp4ShA",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets list of boards (shirt_name, id, slug)"
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Board",
+					"request": {
+						"url": "127.0.0.1:3000/board/S1cg2ucG-",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzE2OTAzODM0MywiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.dgZ8dDKqYIqv4ZutV0Kn9zUr3-8S7fP6ZNhxbz8I6D15tOPwR7zblgm9kvhvyhP0ux9ysaRDkPgeRM6jHp4ShA",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "object",
+									"value": "{\"name\":\"centro universitario de ciencias exactas e ingenierias\", \"short_name\":\"cucei\",\"description\":\"editado\",\"active\":true}",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Edits basic board info based on slug"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Newest Boards",
+					"request": {
+						"url": "127.0.0.1:3000/board/list/new",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzYyMjY2MzQ1OSwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.D5ZlPJwrIoFqgi_RVT4N4mUXJ34nz9tNRa_XAwtr4OVekHR8iesSjhhdeg_aGeDsge2Hlm6iw4yd5yR7148VjA",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets a list of boards ordered from latest to oldest."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Board",
+					"request": {
+						"url": "127.0.0.1:3000/board/HJrNXa9M-",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzE4NzM1NTU2NywiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.TQ1xUY3QaZ2Siwr7BY97EI2g_LK26k98ng4Jecbpmxt04P8SGjf10YrGjJSSHBCudi1uSOQaYBuMv2lI-BHveQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Deletes a specified board if logged in user has necessary priviledges."
+					},
+					"response": []
+				},
+				{
+					"name": "Change Board Image",
+					"request": {
+						"url": "127.0.0.1:3000/board/B1Rdm84rZ/image",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5OTkxMDc0Nzk3NCwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.lV4o_0fQg7wckjKQlixBXHnUYxhLvnytao1QAbbbE84E6DnNNxjYpQvcSE5qiEZvSb0Z6mSmVXv5D8IyqoiiWw",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mfile",
+									"type": "file",
+									"enabled": true,
+									"src": "vacations_with_bae.jpg"
+								}
+							]
+						},
+						"description": "Updates the specified board's image."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Issues",
+			"description": "This folder contains all the routes designated to manage Issues Resource Objects.",
+			"item": [
+				{
+					"name": "Report an Issue",
+					"request": {
+						"url": "127.0.0.1:3000/admin/post-issue",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY3NTE4NDAzOCwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.b6KrrEpeLOVmmKS9BIGFmaCZ_B9_XJTkdBszR3EmDaWjzpkDB0F4gow0KpPM_fDE8RSyJGsCTbX44G2i7nsMnw",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "category",
+									"value": "SPAM",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "issue_text",
+									"value": "I have a huge issue...I'm drunk",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "board_id",
+									"value": "593cfbf2b57e8307f74bc065",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "object_url",
+									"value": "/thread/593d671a7283a8092ac23830",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Reports an issue as the logged in user."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Issue",
+					"request": {
+						"url": "127.0.0.1:3000/admin/issue/5945e41ee12af74625e171b2",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5Nzc1NDE1MDk0OCwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.7e6xkw2Z_FJLSD4SkBauRiul45EUa0H-953Y5oK0a2Cx2IvJC8yY99TkMtnYfgQH9XDIUUrsmAR-e2fn8qrnFA",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets info about a specific issue based on the ID you pass."
+					},
+					"response": []
+				},
+				{
+					"name": "Get My(Admin) Issues",
+					"request": {
+						"url": "127.0.0.1:3000/admin/issues",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5Nzc1NTg3MzYyNywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.fHQ29PHMZVwem_T_QN32wytj-h2osuMl_603Q0I-Ui-B4n_TUi-yLJY7dabsXazhHQy0F2iS6BzobUu7or9tqg",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the issues corresponging to the current logged in user's credentials; if he has a board assigned he can only see the pertinent issues related to his board and allowed divisions, if he doesn't have a board assigned he'll view all issues across the system."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Issues by Division",
+					"request": {
+						"url": "127.0.0.1:3000/admin/issues/division/ILLEGAL",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5Nzc1NTg3MzYyNywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.fHQ29PHMZVwem_T_QN32wytj-h2osuMl_603Q0I-Ui-B4n_TUi-yLJY7dabsXazhHQy0F2iS6BzobUu7or9tqg",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the issues of the division requested if the user has it assigned, if the user has an assigned board it'll only show the ones assigned to him. "
+					},
+					"response": []
+				},
+				{
+					"name": "Get Issues by Board",
+					"request": {
+						"url": "127.0.0.1:3000/admin/issues/board/593cfbf2b57e8307f74bc065",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5Nzc1NTg3MzYyNywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.fHQ29PHMZVwem_T_QN32wytj-h2osuMl_603Q0I-Ui-B4n_TUi-yLJY7dabsXazhHQy0F2iS6BzobUu7or9tqg",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the issues of the board requested if the user has it assigned, if the user has an assigned board it'll only show the ones assigned to him."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Issues by Board and Division",
+					"request": {
+						"url": "127.0.0.1:3000/admin/issues/board/593cfbf2b57e8307f74bc065/division/SPAM",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzgwMTkzMDMwOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.1aQ5LrYTGnq8KJl50GW8jWf_kYpQ5YCybJwqv3k0V778x6iuBE17S9e1LEeI5_7AyIAd27najzoz6M7GE9GPiw",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the issues of the board and division requested."
+					},
+					"response": []
+				},
+				{
+					"name": "Resolve an Issue",
+					"request": {
+						"url": "127.0.0.1:3000/admin/solve-issue/59485dceaec28d10eb8b493a",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzgyNjU1MDM0MywiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.yPzvNKFZkbknrIlv1iQhyPwuY6GOLBoQrLim-DcPsbX_9ZP4Jc5AWd4fdubI1A6Ps2BhGopDHKVEXSjrpq25Rg",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "details",
+									"value": "Just another drunk guy.",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Resolves an Issue by logged in admin."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Networking Requests",
+			"description": "This folder contains all the routes designated to manage InfoRequest Resource Objects.",
+			"item": [
+				{
+					"name": "Send Info Request",
+					"request": {
+						"url": "127.0.0.1:3000/user/request",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODcwMDI5MDU1MiwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.gySkQO86uUpTcz-ApvYwjEaI9h5eAz3JWfdKg_wT6RBVe-YmEypCZypHosEc6lBYk_e1UQda4Il9zZrB_gBN8w",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "to_userid",
+									"value": "593aff8e98bf5854ac2c9bae",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Send another user an info request."
+					},
+					"response": []
+				},
+				{
+					"name": "Check Info Access",
+					"request": {
+						"url": "127.0.0.1:3000/user/is-friend/593aff8e98bf5854ac2c9bae",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzQ4ODIzODIyOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.9OXKTBUK2vtpPedaondojk1FHxi5srHwv01uvyPZeTrxKynPPTm8dtuhfLv5t9m1OaQ2-dW5G9pjZLfteDDNiA",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "to_userid",
+									"value": "593aff8e98bf5854ac2c9bae",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Check if logged in user has authorized access to the profile's info."
+					},
+					"response": []
+				},
+				{
+					"name": "Sent Requests",
+					"request": {
+						"url": "127.0.0.1:3000/user/sent-requests",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzQ4ODIzODIyOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.9OXKTBUK2vtpPedaondojk1FHxi5srHwv01uvyPZeTrxKynPPTm8dtuhfLv5t9m1OaQ2-dW5G9pjZLfteDDNiA",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "to_userid",
+									"value": "593aff8e98bf5854ac2c9bae",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Get list unanswered requests sent by logged in user."
+					},
+					"response": []
+				},
+				{
+					"name": "Received Requests",
+					"request": {
+						"url": "127.0.0.1:3000/user/my-requests",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODcwMDgxNzY3NiwiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.J6XXZ1QArxjNG6oDu6avpD2RwL6LD9w22qLF9CDWj7-6ifX2DqrEtsoT02XTjKvEdS6iUhBk4zB4LWAZgM6p0g",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "to_userid",
+									"value": "593aff8e98bf5854ac2c9bae",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Get list unanswered requests received by logged in user."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Friends",
+					"request": {
+						"url": "127.0.0.1:3000/user/friends",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzQ5MDE2ODE5OSwiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.hTmCHMxAgt6DOHarVl98Q5T-75SV508Rnv_3C6EUcsL0nZaGkjyZvYkF5E762VwQaDLYGAQbm6fh8do2fzgwkQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets logged in user's accepted requests positively, i.e list of access credentials (people who have access to profile info)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Foes",
+					"request": {
+						"url": "127.0.0.1:3000/user/foes",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzQ5MDE2ODE5OSwiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.hTmCHMxAgt6DOHarVl98Q5T-75SV508Rnv_3C6EUcsL0nZaGkjyZvYkF5E762VwQaDLYGAQbm6fh8do2fzgwkQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets logged in user's people with blocked profile access."
+					},
+					"response": []
+				},
+				{
+					"name": "Get InfoRequest",
+					"request": {
+						"url": "127.0.0.1:3000/user/request/5941dce53558612c0e5f8fe8",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzQ5MDE2ODE5OSwiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.hTmCHMxAgt6DOHarVl98Q5T-75SV508Rnv_3C6EUcsL0nZaGkjyZvYkF5E762VwQaDLYGAQbm6fh8do2fzgwkQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the information from a request based on an ID and if current user is an actor of said request."
+					},
+					"response": []
+				},
+				{
+					"name": "Deny All Requests",
+					"request": {
+						"url": "127.0.0.1:3000/user/requests/deny-all",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzQ5MDE2ODE5OSwiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.hTmCHMxAgt6DOHarVl98Q5T-75SV508Rnv_3C6EUcsL0nZaGkjyZvYkF5E762VwQaDLYGAQbm6fh8do2fzgwkQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Responds negatively to all requests that the user hasn't responded to."
+					},
+					"response": []
+				},
+				{
+					"name": "Respond to Request",
+					"request": {
+						"url": "127.0.0.1:3000/user/request/5954737c69c1410aeeff3f8d/respond",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODcwMDgxNzY3NiwiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.J6XXZ1QArxjNG6oDu6avpD2RwL6LD9w22qLF9CDWj7-6ifX2DqrEtsoT02XTjKvEdS6iUhBk4zB4LWAZgM6p0g",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "has_access",
+									"value": "true",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Accept or deny an info request."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Request",
+					"request": {
+						"url": "127.0.0.1:3000/user/request/594330188745f14a6caea010/remove",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzQ5MDE2ODE5OSwiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.hTmCHMxAgt6DOHarVl98Q5T-75SV508Rnv_3C6EUcsL0nZaGkjyZvYkF5E762VwQaDLYGAQbm6fh8do2fzgwkQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "has_access",
+									"value": "true",
+									"type": "text",
+									"enabled": false
+								}
+							]
+						},
+						"description": "Any user in the friend relationship can opt-out removing the access request."
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Existing Request Access",
+					"request": {
+						"url": "127.0.0.1:3000/user/request/5954737c69c1410aeeff3f8d/edit",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODcwMDgxNzY3NiwiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.J6XXZ1QArxjNG6oDu6avpD2RwL6LD9w22qLF9CDWj7-6ifX2DqrEtsoT02XTjKvEdS6iUhBk4zB4LWAZgM6p0g",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "has_access",
+									"value": "true",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Changes access permission of an existing request relationship."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"description": "This folder contains all the routes designated to manage Notification Resource Objects.",
+			"item": [
+				{
+					"name": "Get Unseen Notifications",
+					"request": {
+						"url": "127.0.0.1:3000/user/notifications/unseen",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODM0NjgwODAxNywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.LcnY8dA6ScN0RktP6aLQ6zkWhf7PrR8WoqCZ013ZEO7s-TVOGxiw-o9Kqs7QfG--0Hi2ymw9h4KygXsFWQ-8GQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get's all the unseen notifications for logged in user."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Latest Notifications",
+					"request": {
+						"url": "127.0.0.1:3000/user/notifications/latest",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5OTg5ODkzOTUwMiwiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.5BvHk3sglo1NSVzA6uOFrC-ZM6qek-gYxLlwuNJXL31jko4JzLP34RWKnlLi1n94dOVJZ3yL8_VMW3u1hZPLYg",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get's all the latest N notifications for logged in user."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notification",
+					"request": {
+						"url": "127.0.0.1:3000/user/notification/594ee101f9a43170b122f919",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODM0NjgwODAxNywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.LcnY8dA6ScN0RktP6aLQ6zkWhf7PrR8WoqCZ013ZEO7s-TVOGxiw-o9Kqs7QfG--0Hi2ymw9h4KygXsFWQ-8GQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get the requested notification by logged in user."
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Notification as Seen",
+					"request": {
+						"url": "127.0.0.1:3000/user/notification/5949b9e4dba59917ae8b1185/set-seen",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODM0NjgwODAxNywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.LcnY8dA6ScN0RktP6aLQ6zkWhf7PrR8WoqCZ013ZEO7s-TVOGxiw-o9Kqs7QfG--0Hi2ymw9h4KygXsFWQ-8GQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Sets 'seen' property to the notification selected."
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Notifications as Seen",
+					"request": {
+						"url": "127.0.0.1:3000/user/notifications/set-seen",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODM0NjgwODAxNywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.LcnY8dA6ScN0RktP6aLQ6zkWhf7PrR8WoqCZ013ZEO7s-TVOGxiw-o9Kqs7QfG--0Hi2ymw9h4KygXsFWQ-8GQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Sets 'seen' property to all the unseen notifications of the user."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"url": "127.0.0.1:3000/user/notification/594ee101f9a43170b122f919/remove",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODM0NjgwODAxNywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.LcnY8dA6ScN0RktP6aLQ6zkWhf7PrR8WoqCZ013ZEO7s-TVOGxiw-o9Kqs7QfG--0Hi2ymw9h4KygXsFWQ-8GQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Removes a specific use notification permanently."
+					},
+					"response": []
+				},
+				{
+					"name": "Empty Notification Bin",
+					"request": {
+						"url": "127.0.0.1:3000/user/notifications/empty",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODM0NjgwODAxNywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.LcnY8dA6ScN0RktP6aLQ6zkWhf7PrR8WoqCZ013ZEO7s-TVOGxiw-o9Kqs7QfG--0Hi2ymw9h4KygXsFWQ-8GQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Removes all notifications of logged in user permanently."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Replies",
+			"description": "This folder contains all the routes designated to manage Reply Resource Objects and SubReplies.",
+			"item": [
+				{
+					"name": "Reply To Reply",
+					"request": {
+						"url": "127.0.0.1:3000/thread/5965a456bb9aca6b35fff450/replies/59669e90b5b81b71b98f7e1e/reply",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5OTg5NzczODM4MSwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.46bIbNxiGVHq8joDxK7Zl9TJ-0zukXlrVmwhkHptTaxeOqyqdKQStAukIYZ68fay6qK8DVyT-xmxW02ELOY9Pw",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mfile",
+									"type": "file",
+									"enabled": true,
+									"src": "cute_gal.jpg"
+								},
+								{
+									"key": "text",
+									"value": "that's sad bruv",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Posts a SubReply, use the 'to' field to answer/address someone and send notification to him/her."
+					},
+					"response": []
+				},
+				{
+					"name": "Replies NoSubReplies",
+					"request": {
+						"url": "127.0.0.1:3000/thread/5965a456bb9aca6b35fff450/replies/nosub",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzM5MjExMjYyOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.GppPafmTetKhA-EGB1NnQpa6hQ-019gbjzlQogrGD2k_IN9XpFvRLoYyHGmjnXAXiI_J9cL6OHd7jL85EnyH0Q",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the replies of a thread based on a thread id but without subreplies"
+					},
+					"response": []
+				},
+				{
+					"name": "Replies With SubReplies",
+					"request": {
+						"url": "127.0.0.1:3000/thread/5954091b0e46b46b95085a91/replies",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzM5MjExMjYyOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.GppPafmTetKhA-EGB1NnQpa6hQ-019gbjzlQogrGD2k_IN9XpFvRLoYyHGmjnXAXiI_J9cL6OHd7jL85EnyH0Q",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the replies of a thread based on a thread id with subreply field."
+					},
+					"response": []
+				},
+				{
+					"name": "Reply to Thread",
+					"request": {
+						"url": "127.0.0.1:3000/thread/5965a456bb9aca6b35fff450/reply",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5OTg5NzY0NjMwMywiaXNzIjoiNTkzYWZmOGU5OGJmNTg1NGFjMmM5YmFlIn0.ea2Qgud9A601pK7xn1ET4sW5k3OfEVndGj3X4ijmlbhkBGEAtkuWzcmIhGIaiLbqKMuaISS1RaiO8kfy7DcJlw",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mfile",
+									"type": "file",
+									"enabled": false,
+									"src": "aids.jpg"
+								},
+								{
+									"key": "text",
+									"value": "I like this threads",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Reply o a thread based on it's ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reply NoSubreplies",
+					"request": {
+						"url": "127.0.0.1:3000/thread/replies/5940645efef2f66e89057387",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzM5MjExMjYyOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.GppPafmTetKhA-EGB1NnQpa6hQ-019gbjzlQogrGD2k_IN9XpFvRLoYyHGmjnXAXiI_J9cL6OHd7jL85EnyH0Q",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get a reply without the replies field"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reply With SubReplies",
+					"request": {
+						"url": "127.0.0.1:3000/thread/replies/59669e90b5b81b71b98f7e1e",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzM5MjExMjYyOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.GppPafmTetKhA-EGB1NnQpa6hQ-019gbjzlQogrGD2k_IN9XpFvRLoYyHGmjnXAXiI_J9cL6OHd7jL85EnyH0Q",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get a reply with the replies field"
+					},
+					"response": []
+				},
+				{
+					"name": "Replies Limited SubReplies",
+					"request": {
+						"url": "127.0.0.1:3000/thread/5949b8b709eb3716f89996ac/replies/limit-sub",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzM5MjExMjYyOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.GppPafmTetKhA-EGB1NnQpa6hQ-019gbjzlQogrGD2k_IN9XpFvRLoYyHGmjnXAXiI_J9cL6OHd7jL85EnyH0Q",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the replies of a thread based on a thread id with subreply field limited to two."
+					},
+					"response": []
+				},
+				{
+					"name": "Kill Reply as admin",
+					"request": {
+						"url": "127.0.0.1:3000/thread/replies/kill/59540ae90e46b46b95085a94",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODc0OTQwMDAxMCwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.jtJEPGKBoVC26BdXqt20phDC0-rZd8icZajtCalisrCk3IizV7qxDT8wraWEGxYhMPzu7TrXxX0QFu8ctR_vyQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "reason",
+									"value": "I don't like you.",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Overwrites reply content and categorizes the comment as inappropriate."
+					},
+					"response": []
+				},
+				{
+					"name": "Kill SubReply as admin",
+					"request": {
+						"url": "127.0.0.1:3000/thread/replies/kill/59540ae90e46b46b95085a94/59540cb90e46b46b95085a98",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODc0OTQwMDAxMCwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.jtJEPGKBoVC26BdXqt20phDC0-rZd8icZajtCalisrCk3IizV7qxDT8wraWEGxYhMPzu7TrXxX0QFu8ctR_vyQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "reason",
+									"value": "I don't like you.",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Overwrites subreply content and categorizes the comment as inappropriate."
+					},
+					"response": []
+				},
+				{
+					"name": "SubReply",
+					"request": {
+						"url": "127.0.0.1:3000/thread/5965a456bb9aca6b35fff450/replies/59669e90b5b81b71b98f7e1e/596c440e779dd91c020bce68/reply",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5OTg5Nzk1MDQ5OSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.Wt6AvGEL2xFpNv4xGT_IUj3doMLFsZy8yqvh8QLX8iKt2HIawzlCzQuFfRczg4RDO-F86PDgBym8fMZSEHdI3w",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mfile",
+									"type": "file",
+									"enabled": true,
+									"src": "aids.jpg"
+								},
+								{
+									"key": "text",
+									"value": "Lol I like ducks",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Reply to a comment, optional \"to\" field."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Settings",
+			"description": "Routes to get public system settings",
+			"item": [
+				{
+					"name": "List of Priviledges",
+					"request": {
+						"url": "127.0.0.1:3000/settings/priviledge/list",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODU3Mzc0NzgyNSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.8oPzRZB_YvdBXPaIXHi1ShI68z9pwQPsA4VQfD5kVozuYZlZn9bYhfqUR-ROwnYIoEPiHapAYCaAfHYzia7YfA",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the existent system priviledges."
+					},
+					"response": []
+				},
+				{
+					"name": "List of Issue Categories",
+					"request": {
+						"url": "127.0.0.1:3000/settings/issue/categories",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODU3Mzc0NzgyNSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.8oPzRZB_YvdBXPaIXHi1ShI68z9pwQPsA4VQfD5kVozuYZlZn9bYhfqUR-ROwnYIoEPiHapAYCaAfHYzia7YfA",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the existent system issue categories."
+					},
+					"response": []
+				},
+				{
+					"name": "General Thread Settings",
+					"request": {
+						"url": "127.0.0.1:3000/settings/thread/settings",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODU3Mzc0NzgyNSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.8oPzRZB_YvdBXPaIXHi1ShI68z9pwQPsA4VQfD5kVozuYZlZn9bYhfqUR-ROwnYIoEPiHapAYCaAfHYzia7YfA",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Gets the system's max settings and defaults for threads."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Threads",
+			"description": "This folder contains all the routes designated to manage Thread Resource Objects.",
+			"item": [
+				{
+					"name": "Post thread",
+					"request": {
+						"url": "127.0.0.1:3000/thread/S1cg2ucG-/post",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5OTgzMjg0NzkwNiwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.GlmLxTnr_r9fJ3Y12WCruw4uLrljX3irD8gVvdyo1KhWYdSELphC_RKovi3lr-FKjJjmysfcB_3JFO1SCW02fA",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "What do you think?",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "text",
+									"value": "I changed my profile pic boyzzz",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "mfile",
+									"type": "file",
+									"enabled": true,
+									"src": "cute_gal.jpg"
+								}
+							]
+						},
+						"description": "Posts a thread in a specific board"
+					},
+					"response": []
+				},
+				{
+					"name": "List Hot Threads",
+					"request": {
+						"url": "127.0.0.1:3000/thread/list/hot/S1cg2ucG-",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzE5NzEzMDQxOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.qIqThaDchNhUTU0jFsNzDxGklo3VAjJVCJy2EIvl5DBMLK6jPztfCB83cw_FzuNeWcRVx-Iqxo2_ffn1Wn_fTQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "List the threads from a board that are still alive ordered by ranking"
+					},
+					"response": []
+				},
+				{
+					"name": "List New Threads",
+					"request": {
+						"url": "127.0.0.1:3000/thread/list/new/S1cg2ucG-",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzE5NzEzMDQxOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.qIqThaDchNhUTU0jFsNzDxGklo3VAjJVCJy2EIvl5DBMLK6jPztfCB83cw_FzuNeWcRVx-Iqxo2_ffn1Wn_fTQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "List the threads from a board that are still alive ordered by most recent date"
+					},
+					"response": []
+				},
+				{
+					"name": "Search Thread",
+					"request": {
+						"url": "127.0.0.1:3000/thread/search",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							},
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzE5NzEzMDQxOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.qIqThaDchNhUTU0jFsNzDxGklo3VAjJVCJy2EIvl5DBMLK6jPztfCB83cw_FzuNeWcRVx-Iqxo2_ffn1Wn_fTQ",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "query",
+									"value": "my first non",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "board_id",
+									"value": "593cfbf2b57e8307f74bc065",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Search for a thread by title within a specific board"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Thread",
+					"request": {
+						"url": "127.0.0.1:3000/thread/5949b8b709eb3716f89996ac",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzE5NzEzMDQxOSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.qIqThaDchNhUTU0jFsNzDxGklo3VAjJVCJy2EIvl5DBMLK6jPztfCB83cw_FzuNeWcRVx-Iqxo2_ffn1Wn_fTQ",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get a thread object."
+					},
+					"response": []
+				},
+				{
+					"name": "Top Threads Overall",
+					"request": {
+						"url": "127.0.0.1:3000/thread/hot-top",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzkzNDA1Mzg4MiwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.soKkL8uaOIJRRmpz3cZjYUBgXZMmIeCi-wq1USO9EP4e20fMjvP5OFk1hNmYrgH4RxG2s0p1XuQIkbvcjcIp2w",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get the first X top threads in the entire site."
+					},
+					"response": []
+				},
+				{
+					"name": "Kill Thread as admin",
+					"request": {
+						"url": "127.0.0.1:3000/thread/kill/595407defb9f066b0e1464e5",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODc0OTQwMDAxMCwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.jtJEPGKBoVC26BdXqt20phDC0-rZd8icZajtCalisrCk3IizV7qxDT8wraWEGxYhMPzu7TrXxX0QFu8ctR_vyQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "reason",
+									"value": "I don't like you.",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Set's the \"alive\" property of the thread to false so it stops being displayable."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"description": "This folder contains all the routes designated to manage User Resource Objects.",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"url": "127.0.0.1:3000/user/register",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "phone_number",
+									"value": "3314103611",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "username",
+									"value": "charles",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Creates a user in the system, this will change in the future."
+					},
+					"response": []
+				},
+				{
+					"name": "User Login by Phone",
+					"request": {
+						"url": "127.0.0.1:3000/user/login/phone",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "phone_number",
+									"value": "3314103611",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Logs a user and gets JWT from server, will change in the future."
+					},
+					"response": []
+				},
+				{
+					"name": "User Profile",
+					"request": {
+						"url": " 127.0.0.1:3000/user/5943e5d583350957c895e1f7/profile",
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODc1MzUzNjY1OSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.VWwDSfYVAKlb5sbXZ60MChhNAXZKMdnhUWZ14T4W7HNnxqSyXvXkAJLecSEC-bkS8BQfnxfQSd23W4dWAO5Xkw",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": "Get an user profile and get corresponding data based on access level."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"url": "127.0.0.1:3000/user/update-profile",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzA0MDcwOTkzMywiaXNzIjoiNTkzYWZjMWI3MWFmNGI1MzIyZTQyYWUzIn0.2_ervjvEDRc7JKqnHwVQy6ffSZ4zalhvvZSB8hFaQz0N_0vTu3HLGZkqEscEiSN9rbIah2GqeQQN15qz1W86kg",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "contact_info",
+									"value": "{\"network_name\":\"snapchat\",\"network_contact\":\"crazyKaren\"}",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "user_id",
+									"value": "593b0069a5552554f168197d",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Update an user profile"
+					},
+					"response": []
+				},
+				{
+					"name": "User Login by Username",
+					"request": {
+						"url": "127.0.0.1:3000/user/login/standard",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "charles",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Logs a user and gets JWT from server, will change in the future."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Username",
+					"request": {
+						"url": "127.0.0.1:3000/user/search",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzY1NTY1MjE5NSwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.yTE5oeOH3aDHC10RKU3SKutIjq_guA2Iq8VteV0cYDzqw0VHxwxkMrTbY0iQly_Hh40caabXndUR_GkqpSGJdw",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "almaKaren",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Search an user by username"
+					},
+					"response": []
+				},
+				{
+					"name": "Ban User",
+					"request": {
+						"url": "127.0.0.1:3000/user/ban",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzA0MTQ5NDMzNSwiaXNzIjoiNTkzYWZjMWI3MWFmNGI1MzIyZTQyYWUzIn0.z-XBboycD6Fwh4iJIV80doz9eN-mFh_bRLrCnulTsBsfLsy0e2xNaSpjTM9LuKXQAbM5hxhD_KCbqQMv6sDtfQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "user_id",
+									"value": "593b0069a5552554f168197d",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Unban User",
+					"request": {
+						"url": "127.0.0.1:3000/user/unban",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzA0MTQ5NDMzNSwiaXNzIjoiNTkzYWZjMWI3MWFmNGI1MzIyZTQyYWUzIn0.z-XBboycD6Fwh4iJIV80doz9eN-mFh_bRLrCnulTsBsfLsy0e2xNaSpjTM9LuKXQAbM5hxhD_KCbqQMv6sDtfQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "user_id",
+									"value": "593b0069a5552554f168197d",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"url": "127.0.0.1:3000/user/remove",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzA0MTQ5NDMzNSwiaXNzIjoiNTkzYWZjMWI3MWFmNGI1MzIyZTQyYWUzIn0.z-XBboycD6Fwh4iJIV80doz9eN-mFh_bRLrCnulTsBsfLsy0e2xNaSpjTM9LuKXQAbM5hxhD_KCbqQMv6sDtfQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "user_id",
+									"value": "593b0ea9c974af5c75e62a94",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Promote User",
+					"request": {
+						"url": "127.0.0.1:3000/user/promote",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzA0MTQ5NDMzNSwiaXNzIjoiNTkzYWZjMWI3MWFmNGI1MzIyZTQyYWUzIn0.z-XBboycD6Fwh4iJIV80doz9eN-mFh_bRLrCnulTsBsfLsy0e2xNaSpjTM9LuKXQAbM5hxhD_KCbqQMv6sDtfQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "user_id",
+									"value": "593b0069a5552554f168197d",
+									"type": "text",
+									"enabled": true
+								},
+								{
+									"key": "priviledges",
+									"value": "[\"search_user\", \"can_reply\", \"can_post\",\"admin_admins\",\"admin_issues\",\"delete_board\", \"create_board\", \"edit_board\", \"admin_board\", \"promote_user\"]",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Password",
+					"request": {
+						"url": "127.0.0.1:3000/user/password",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5NzA0MTQ5NDMzNSwiaXNzIjoiNTkzYWZjMWI3MWFmNGI1MzIyZTQyYWUzIn0.z-XBboycD6Fwh4iJIV80doz9eN-mFh_bRLrCnulTsBsfLsy0e2xNaSpjTM9LuKXQAbM5hxhD_KCbqQMv6sDtfQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "new_password",
+									"value": "password",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Search By Priviledges",
+					"request": {
+						"url": "127.0.0.1:3000/user/search/by-priviledge",
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5ODU4MjIwNDc2OSwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.hLvsaD7SlPy85eqa6ITN29sZF0ZZvko9qhBElIOiwHYeROnMJdA3mK8G99xYf4tTcjJQflHCmT4sHni1VgVqZQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "divisions",
+									"value": "[\"search_user\"]",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Gets the users who coincide with the array of priviledges sent."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Alias",
+					"request": {
+						"url": "127.0.0.1:3000/user/alias",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5OTgzMjg0NzkwNiwiaXNzIjoiNTkzYjAwNjlhNTU1MjU1NGYxNjgxOTdkIn0.GlmLxTnr_r9fJ3Y12WCruw4uLrljX3irD8gVvdyo1KhWYdSELphC_RKovi3lr-FKjJjmysfcB_3JFO1SCW02fA",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "alias",
+									"value": "",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Edits the user alias if cooldown time has passed."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile Picture",
+					"request": {
+						"url": "127.0.0.1:3000/user/profile-pic",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzZXNzX2V4cCI6MTQ5OTk1Njc3ODAzMSwiaXNzIjoiNTk0M2U1ZDU4MzM1MDk1N2M4OTVlMWY3In0.ZomJibrVM55RrXKpIv4NNIgUAlTB3rvwjq7d7tWbzSUUxDHV-0Z3ulYgMIrJk4GMcZpDU6ejV9pjWTuxOm2nEw",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "mfile",
+									"value": "",
+									"type": "file",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Changes the logged in user's profile pic."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
