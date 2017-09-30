@@ -5,10 +5,6 @@ Pending Features:
   - Add periodic cleaning routines (Server)
   - Add error log capability
 
-/--  DAY COUNTDOWN  --/
-
-Days until deadline: 14
-
 //--- FINISHED ROUTES ---//
 
 *Users*
@@ -123,7 +119,7 @@ ToDo:
 ======== v 1.1.0 Banshee Groups Pre-Beta Release ========
 
 Enhancements:
-  - Everything MUST be done with Promises now for better error handling and reduced CALLBACK HELL
+  - Everything MUST be done with Promises now for better error handling and reduced CALLBACK HELL **IN PROGRESS**
   - Code MUST adhere to ES6 standards
   - Separate notifications and requests from users.js
   - Separate replies from threads.js
