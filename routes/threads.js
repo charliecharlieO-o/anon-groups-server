@@ -374,14 +374,27 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
         res.status(404).send("Thread Not Found");
       }
       else{
+        // Build poster object
+        let poster = null;
+        if(req.user.data.alias.handle != null) {
+          poster = {
+            "poster_name": req.user.data.alias.handle,
+            "poster_thumbnail": "anon",
+            "poster_id": req.user.data.alias.anonId,
+            "anon": true
+          }
+        } else {
+          poster = {
+            "poster_name": req.user.data.username,
+            "poster_thumbnail": (req.user.data.profile_pic.thumbnail == null)? "anon": req.user.data.profile_pic.thumbnail,
+            "poster_id": req.user.data._id,
+            "anon": false
+          }
+        }
         // Build reply
         let newReply = new Reply({
           "thread": thread._id,
-          "poster": {
-            "poster_name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
-            "poster_thumbnail": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
-            "poster_id": req.user.data._id
-          },
+          "poster": poster,
           "media": null,
           "text": req.body.text,
           "replies": []
@@ -400,6 +413,7 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
           // Save Reply
           newReply.save((err, reply) => {
             if(err){
+              console.log(err)
               res.json({"success": false});
             }
             else {
@@ -452,16 +466,29 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
         Reply.findOne({ "_id": req.params.reply_id, "reply_count": { "$lt": settings.max_reply_subreplies }},
         (err, reply) => {
           if(err || !reply){
-            res.json({ "success": false });
+            res.status(404).send("Comment not found");
           }
           else{
+            // Prepare poster SubDoc
+            let poster = null;
+            if(req.user.data.alias.handle != null) {
+              poster = {
+                "poster_name": req.user.data.alias.handle,
+                "poster_thumbnail": "anon",
+                "poster_id": req.user.data.alias.anonId,
+                "anon": true
+              }
+            } else {
+              poster = {
+                "poster_name": req.user.data.username,
+                "poster_thumbnail": req.user.data.profile_pic.thumbnail,
+                "poster_id": req.user.data._id,
+                "anon": false
+              }
+            }
             // Prepare SubDocument
             let subReply = {
-              "poster": {
-                "poster_name": (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username,
-                "poster_thumbnail": (req.user.data.alias.handle != null)? "anon" : req.user.data.profile_pic.thumbnail,
-                "poster_id": req.user.data._id
-              },
+              "poster": poster,
               "to": {
                 "poster_name": reply.poster.poster_name,
                 "poster_id": reply.poster.poster_id,
