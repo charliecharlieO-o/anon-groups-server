@@ -18,6 +18,7 @@ const userSchema = new Schema({
 	username: { type: String, minlength:1, maxlength: 35, required: true, unique: true, index: true },
 	password: { type: String, required: true },
 	alias: { // This field will enforce user anonimity throughout the site
+		anonId: { type: Schema.ObjectId, index: true, default: null }, //yass anonymous ID  >:)
 		handle: { type: String, minlength: 1, maxlength: 35, default: null },
 		changed: { type: Date, default: null }
 	},
