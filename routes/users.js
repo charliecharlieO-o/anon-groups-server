@@ -27,11 +27,11 @@ const Notification = require("../models/notification");
 const user_list_default = "_id username last_log banned";
 
 /*DEV*/
-router.get("/list/all", (req, res) => {
+/*router.get("/list/all", (req, res) => {
   User.find({}, (err, users) => {
     res.json(users);
   })
-});
+});*/
 
 /* GET users that registered between X and Y dates */
 router.get("/list/by-date", passport.authenticate("jwt", {"session": false}), (req, res) => {
