@@ -21,4 +21,4 @@ module.exports = {
 	"allowed_file_types": ["pdf", "mp3", "mp4", "gif", "jpeg", "webm", "png"],
 	"image_mime_type": ["image/gif", "image/jpeg", "image/png"],
 	"video_mime_type": ["video/webm", "video/mp4"]
-};
+}
