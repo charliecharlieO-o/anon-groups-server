@@ -12,7 +12,6 @@ const jwt = require("jwt-simple")
 const config = require("./config/database")
 
 // Load routes
-//const index = require("./routes/index")
 const threads = require("./routes/threads")
 const boards = require("./routes/boards")
 const users = require("./routes/users")

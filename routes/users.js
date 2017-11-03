@@ -317,22 +317,30 @@ router.put("/profile-pic", passport.authenticate("jwt", {"session": false}), uti
 
 /* PUT change user alias */
 router.put("/alias", passport.authenticate("jwt", {"session": false}), (req, res) => {
-  const hours = Math.abs(req.user.data.alias.changed - new Date())/36e5
-  if(req.user.data.alias.handle == null || hours >= settings.alias_change_rate){
-    const value = (req.body.alias || req.body.alias === "" || thread.text.match(/^\s*$/) == null)?
-      null : req.body.alias
-    //Check it's a valid string
-    req.user.data.update({"$set":{"alias.handle": value, "changed": new Date()}}, (err) => {
-      if(err){
-        res.json({ "success": false })
-      }
-      else{
-        res.json({ "success": true })
-      }
-    })
+  const hours = Math.abs(req.user.data.alias.changed - new Date())/36e5;
+  if(req.user.data.alias.handle === null || hours >= settings.alias_change_rate){
+    // Determine new alias string
+    const aliasHandle = (!req.body.alias || req.body.alias === "" || req.body.alias.match(/^\s*$/) !== null)?
+      null : req.body.alias;
+    // Update user
+    User.findByIdAndUpdate(req.user.data._id,
+      {
+        "$set":{
+          "alias.anonId": mongoose.Types.ObjectId(),
+          "alias.handle": aliasHandle,
+          "alias.changed": new Date()
+        }
+      }, (err) => {
+        if(err){
+          res.json({ "success": false});
+        }
+        else{
+          res.json({ "success": true });
+        }
+    });
   }
   else{
-    res.json({ "success": false, "doc": hours })
+    res.json({ "success": false, "err": "hours"});
   }
 })
 
