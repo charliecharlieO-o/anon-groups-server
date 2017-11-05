@@ -319,6 +319,20 @@ router.get("/:thread_id/replies", passport.authenticate("jwt", {"session": false
   })
 })
 
+/* POST get replies after timestam */
+router.post('/:thread_id/replies/since', passport.authenticate('jwt', {'session': false}), (req, res) => {
+  const date = new Date(req.body.date)
+  Reply.find({ 'thread': req.params.thread_id, 'removed': false, 'created_at': { '$gt': req.body.date }}).sort(
+    { 'created_at': -1 }
+  ).exec((err, notifications) => {
+    if(err || !notifications){
+      res.json({ 'success': false })
+    } else{
+      res.json({ 'success': true, 'doc': notifications })
+    }
+  })
+})
+
 /* GET replies to a thread based on thread's shortid without subReply field */
 router.get("/:thread_id/replies/nosub", passport.authenticate("jwt", {"session": false}), (req, res) => {
   Reply.find({ "thread": req.params.thread_id }, { "replies": 0 }, (err, replies) => {
@@ -394,25 +408,26 @@ router.post("/:thread_id/reply", passport.authenticate("jwt", {"session": false}
         }
         // Build reply
         let newReply = new Reply({
-          "thread": thread._id,
-          "poster": poster,
-          "media": null,
-          "text": req.body.text,
-          "replies": []
+          'thread': thread._id,
+          'poster': poster,
+          'text': req.body.text,
+          'media': null,
+          'replies': []
         })
         // Create thumbnail and add file to reply if Uploaded
         utils.thumbnailGenerator(req.file).then((file) => {
           // Add media to reply
-          newReply.media = (file)?
-            {
-              "name": file.originalname,
-              "location": file.path,
-              "mimetype": file.mimetype,
-              "size": file.size,
-              "thumbnail": (file == null)? null : file.thumbnail
-            }: null
+          if (req.file) {
+            newReply.media = {
+              'name': file.originalname,
+              'location': file.path,
+              'mimetype': file.mimetype,
+              'size': file.size,
+              'thumbnail': (file == null)? null : file.thumbnail
+            }
+          }
           // Save Reply
-          newReply.save((err, reply) => {
+          Reply.create(newReply, (err, reply) => {
             if(err){
               console.log(err)
               res.json({"success": false})
@@ -501,33 +516,34 @@ router.post("/:thread_id/replies/:reply_id/reply", passport.authenticate("jwt", 
             }
             utils.thumbnailGenerator(req.file).then((file) => {
               // Add media to reply
-              subReply.media = (file)?
-                {
-                  "name": file.originalname,
-                  "location": file.path,
-                  "mimetype": file.mimetype,
-                  "size": file.size,
-                  "thumbnail": (file == null)? null : file.thumbnail
-                }: null
-                // Push to subreply array
-                reply.update({ "$push": { "replies": subReply }, "$inc": { "reply_count": 1 }}, { 'runValidators': true }, (err) => {
-                  if(err){
-                    res.json({ "success": false })
+              if (req.file) {
+                subReply.media = {
+                  'name': file.originalname,
+                  'location': file.path,
+                  'mimetype': file.mimetype,
+                  'size': file.size,
+                  'thumbnail': (file == null)? null : file.thumbnail
+                }
+              }
+              // Push to subreply array
+              reply.update({ "$push": { "replies": subReply }, "$inc": { "reply_count": 1 }}, { 'runValidators': true }, (err) => {
+                if(err){
+                  res.json({ "success": false })
+                }
+                else{
+                  res.json({ "success": true, "doc": subReply })
+                  // Notificate OP
+                  const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username
+                  if(req.user.data._id != reply.poster.poster_id){
+                    utils.createAndSendNotification(reply.poster.poster_id, reply.poster.anon, "New Reply",
+                    `${rp} replied under your comment.`, { 'type': 'reply', 'threadId': thread._id, 'replyId': reply._id })
                   }
-                  else{
-                    res.json({ "success": true, "doc": subReply })
-                    // Notificate OP
-                    const rp = (req.user.data.alias.handle != null)? req.user.data.alias.handle : req.user.data.username
-                    if(req.user.data._id != reply.poster.poster_id){
-                      utils.createAndSendNotification(reply.poster.poster_id, reply.poster.anon, "New Reply",
-                        `${rp} replied under your comment.`, { 'type': 'reply', 'threadId': thread._id, 'replyId': reply._id })
-                    }
-                    // Send notification to 'TO'
-                    if(subReply.to != null){
-                      utils.createAndSendNotification(subReply.to.poster_id, reply.poster.anon, "New Reply",
-                      `${rp} replied to you.`, { 'type': 'reply', 'threadId': thread._id, 'replyId': reply._id })
-                    }
+                  // Send notification to 'TO'
+                  if(subReply.to != null){
+                    utils.createAndSendNotification(subReply.to.poster_id, reply.poster.anon, "New Reply",
+                    `${rp} replied to you.`, { 'type': 'reply', 'threadId': thread._id, 'replyId': reply._id })
                   }
+                }
                 })
             }).catch((err) => {
               // Delete Uploaded File

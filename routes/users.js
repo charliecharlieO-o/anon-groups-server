@@ -723,6 +723,22 @@ router.delete("/request/:request_id/remove", passport.authenticate("jwt", {"sess
 
 const default_notification_list = "_id title description reference_url seen"
 
+/* POST list notifications past X date */
+router.post('/notifications/from', passport.authenticate('jwt', {'session': false}), (req, res) => {
+  const date = new Date(req.body.date)
+  Notification.find({ 'owner': req.user.data._id, 'seen': false, 'date_alerted': { '$gt': req.body.date }}).select(
+    default_notification_list
+  ).sort(
+    { 'date_alerted': -1 }
+  ).exec((err, notifications) => {
+    if(err || !notifications){
+      res.json({ 'success': false })
+    } else{
+      res.json({ 'success': true, 'doc': notifications })
+    }
+  })
+})
+
 /* PUT set a notification as seen */
 router.put("/notification/:notif_id/set-seen", passport.authenticate("jwt", {"session": false}), (req, res) => {
   const now = (new Date()).now
