@@ -1,4 +1,4 @@
-# banshee-groups-server
+# AnonGroups Server
 
 ## Lint files
 You can lint files using:
